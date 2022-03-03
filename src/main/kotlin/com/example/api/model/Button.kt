@@ -16,5 +16,5 @@ data class Button(
     val textSize: String,
 
     @Json(name = "Image")
-    val image: String,
+    val image: String = "",
 )
