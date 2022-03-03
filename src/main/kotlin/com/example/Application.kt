@@ -42,7 +42,7 @@ fun Application.module(testing: Boolean = false) {
             val response: String
             when (val event = parsed["event"]) {
                 "conversation_started" -> {
-                    response = handleConversationStarted(klaxon.parse<ConversationStartedEvent>(body)!!)
+                    response = handleConversationStartedPrev(klaxon.parse<ConversationStartedEvent>(body)!!)
                 }
                 //todo handle all events
                 else -> {
@@ -54,6 +54,42 @@ fun Application.module(testing: Boolean = false) {
             call.respond(HttpStatusCode.OK, response)
         }
     }
+}
+
+fun handleConversationStartedPrev(event: ConversationStartedEvent): String {
+    val welcomeMessage = WelcomeMessage(
+        Sender("Чат бот"),
+        "text",
+        "Доброго дня!" +
+                "\nДякуємо, що звернулися до нашої служби #психологічної підтримки!" +
+                "\nНаші спеціалісти готові вам надати допомогу в зручному для вас форматі, який допоможе визначити Я чат-бот." +
+                "\n\nВибери мову спілкування" +
+                "\nChoose language",
+        "choose_lang_stage",
+        Keyboard(
+            type = "keyboard",
+            defaultHeight = false,
+            inputFieldState = "hidden",
+            listOf(
+                Button(
+                    actionType = "reply",
+                    actionBody = "ua",
+                    text = "\uD83C\uDDFA\uD83C\uDDE6",
+                ),
+                Button(
+                    actionType = "reply",
+                    actionBody = "en",
+                    text = "\uD83C\uDDFA\uD83C\uDDF8",
+                ),
+                Button(
+                    actionType = "reply",
+                    actionBody = "ru",
+                    text = "\uD83C\uDDF7\uD83C\uDDFA"
+                ),
+            )
+        )
+    )
+    return welcomeMessage.toJson()
 }
 
 fun handleConversationStarted(event: ConversationStartedEvent): String {
