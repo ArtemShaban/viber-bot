@@ -10,9 +10,9 @@ class WelcomeRequest(state: BotLogicState) : UserRequest<Lang, Lang>(state) {
 
     override fun getOptions(): Map<Lang, String> {
         return mapOf(
-            Pair(Lang.UK, "Укр"),
-            Pair(Lang.RU, "Рус"),
-            Pair(Lang.EN, "Eng")
+            Pair(Lang.UK, "Укр(\uD83C\uDDFA\uD83C\uDDE6)"),
+            Pair(Lang.RU, "Рус(\uD83C\uDDF7\uD83C\uDDFA)"),
+            Pair(Lang.EN, "Eng(\uD83C\uDDFA\uD83C\uDDF8)")
         )
     }
 

@@ -2,6 +2,9 @@ package com.example
 
 import com.beust.klaxon.Klaxon
 import com.example.api.model.*
+import com.example.logic.BotLogic
+import com.example.logic.BotLogicState
+import com.example.logic.request.UserRequest
 import io.ktor.application.*
 import io.ktor.client.call.*
 import io.ktor.http.*
@@ -54,37 +57,32 @@ fun Application.module(testing: Boolean = false) {
 }
 
 fun handleConversationStarted(event: ConversationStartedEvent): String {
-    val welcomeMessage = WelcomeMessage(
-        Sender("Чат бот"),
-        "text",
-        "Доброго дня!" +
-                "\nДякуємо, що звернулися до нашої служби #психологічної підтримки!" +
-                "\nНаші спеціалісти готові вам надати допомогу в зручному для вас форматі, який допоможе визначити Я чат-бот." +
-                "\n\nВибери мову спілкування" +
-                "\nChoose language",
-        "choose_lang_stage",
-        Keyboard(
-            type = "keyboard",
-            defaultHeight = false,
-            inputFieldState = "hidden",
-            listOf(
-                Button(
-                    actionType = "reply",
-                    actionBody = "ua",
-                    text = "\uD83C\uDDFA\uD83C\uDDE6",
-                ),
-                Button(
-                    actionType = "reply",
-                    actionBody = "en",
-                    text = "\uD83C\uDDFA\uD83C\uDDF8",
-                ),
-                Button(
-                    actionType = "reply",
-                    actionBody = "ru",
-                    text = "\uD83C\uDDF7\uD83C\uDDFA"
-                ),
-            )
-        )
-    )
-    return welcomeMessage.toJson()
+    logger.debug { "Handle conversation started event: $event" }
+    return newMessage(BotLogic().getNextUserRequest())
 }
+
+
+private fun newMessage(userRequest: UserRequest<*, *>): String {
+    val buttons = userRequest.getOptions().map { Button(actionType = "replay", actionBody = it.key.name, text = it.value) }
+    val keyboard = Keyboard(
+        type = "keyboard",
+        defaultHeight = false,
+        inputFieldState = "hidden",
+        buttons = buttons
+    )
+    val message = WelcomeMessage(
+        sender = Sender(Constants.senderName),
+        type = "text",
+        text = userRequest.getMessage(),
+        trackingData = klaxon.toJsonString(userRequest.state),
+        keyboard = keyboard
+    )
+    return message.toJson()
+}
+
+class Constants {
+    companion object {
+        const val senderName = "Чат бот"
+    }
+}
+
