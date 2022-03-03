@@ -42,7 +42,7 @@ fun Application.module(testing: Boolean = false) {
             val response: String
             when (val event = parsed["event"]) {
                 "conversation_started" -> {
-                    response = handleConversationStartedPrev(klaxon.parse<ConversationStartedEvent>(body)!!)
+                    response = handleConversationStarted(klaxon.parse<ConversationStartedEvent>(body)!!)
                 }
                 //todo handle all events
                 else -> {
@@ -109,7 +109,11 @@ private fun newMessage(userRequest: UserRequest<*, *>): String {
     val message = WelcomeMessage(
         sender = Sender(Constants.senderName),
         type = "text",
-        text = userRequest.getMessage(),
+        text = "Доброго дня!" +
+                "\nДякуємо, що звернулися до нашої служби #психологічної підтримки!" +
+                "\nНаші спеціалісти готові вам надати допомогу в зручному для вас форматі, який допоможе визначити Я чат-бот." +
+                "\n\nВибери мову спілкування" +
+                "\nChoose language",
         trackingData = "klaxon.toJsonString(userRequest.state)",
         keyboard = keyboard
     )
