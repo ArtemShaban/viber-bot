@@ -1,5 +1,8 @@
 package com.example
 
+import com.beust.klaxon.Klaxon
+import com.example.api.model.ConversationStartedEvent
+import com.example.api.model.Event
 import io.ktor.application.*
 import io.ktor.client.call.*
 import io.ktor.http.*
@@ -13,6 +16,7 @@ private val logger = KotlinLogging.logger { }
 fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
 
 fun Application.module(testing: Boolean = false) {
+    val klaxon = Klaxon()
 
     routing {
         get("/") {
@@ -31,9 +35,18 @@ fun Application.module(testing: Boolean = false) {
             val body = call.receiveText()
             logger.info { "Webhook received: $call $body" }
 
-            //todo handle webhooks here
+            val event = Event.fromJson(body)
+            when (event.event) {
+                "conversation_started" -> handleConversationStarted(klaxon.parse<ConversationStartedEvent>(body)!!)
+                //todo handle all events
+                else -> logger.warn { "Unhandled event: ${event.event}" }
+            }
 
             call.respond(HttpStatusCode.OK)
         }
     }
+}
+
+fun handleConversationStarted(parse: ConversationStartedEvent) {
+    TODO("Not yet implemented")
 }

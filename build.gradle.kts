@@ -18,15 +18,22 @@ repositories {
 }
 
 dependencies {
+    //http server
     implementation("io.ktor:ktor-server-core:$ktor_version")
     implementation("io.ktor:ktor-server-netty:$ktor_version")
 
-    implementation("io.github.microutils:kotlin-logging:1.7.9")
-    implementation("ch.qos.logback:logback-classic:$logback_version")
-
+    //http client
     implementation("io.ktor:ktor-client-core:$ktor_version")
     implementation("io.ktor:ktor-client-cio:$ktor_version")
 
+    //logging
+    implementation("io.github.microutils:kotlin-logging:1.7.9")
+    implementation("ch.qos.logback:logback-classic:$logback_version")
+
+    //JSON parser
+    implementation("com.beust:klaxon:5.5")
+
+    //test
     testImplementation("io.ktor:ktor-server-tests:$ktor_version")
     testImplementation("org.jetbrains.kotlin:kotlin-test")
 }
