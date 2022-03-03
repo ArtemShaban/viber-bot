@@ -3,7 +3,6 @@ package com.example
 import com.beust.klaxon.Klaxon
 import com.example.api.model.*
 import com.example.logic.BotLogic
-import com.example.logic.BotLogicState
 import com.example.logic.request.UserRequest
 import io.ktor.application.*
 import io.ktor.client.call.*
@@ -43,6 +42,11 @@ fun Application.module(testing: Boolean = false) {
             when (val event = parsed["event"]) {
                 "conversation_started" -> {
                     response = handleConversationStarted(klaxon.parse<ConversationStartedEvent>(body)!!)
+                }
+                "message" -> {
+                    val message = klaxon.parse<ClientMessageEvent>(StringReader(body))
+                    logger. debug { "Message event: $message" }
+                    response = ""
                 }
                 //todo handle all events
                 else -> {
