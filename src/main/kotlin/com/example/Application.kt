@@ -114,7 +114,7 @@ private fun newMessage(userRequest: UserRequest<*, *>): String {
                 "\nНаші спеціалісти готові вам надати допомогу в зручному для вас форматі, який допоможе визначити Я чат-бот." +
                 "\n\nВибери мову спілкування" +
                 "\nChoose language",
-        trackingData = "klaxon.toJsonString(userRequest.state)",
+        trackingData = "choose_lang_stage",
         keyboard = keyboard
     )
     return message.toJson()
