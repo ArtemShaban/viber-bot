@@ -14,23 +14,18 @@ fun Application.module(testing: Boolean = false) {
         get("/") {
             call.respondText("Hello, world!")
         }
-
-        get("/hi") {
-            call.respondText("hi!")
+        get("/about") {
+            call.respondText("Viber bot for psychological help")
         }
-
-        get("/webhook") {
-            call.respond(HttpStatusCode.OK, "Get webhook!")
-        }
-
-        post("/webhook") {
-            call.respond(HttpStatusCode.OK, "Post webhook!")
-        }
-
         get("/register_webhook") {
             val response = registerBotWebhook()
             val stringBody: String = response.receive()
             call.respondText(response.toString() + "\n" + stringBody)
+        }
+
+        post("/webhook") {
+            //todo handle webhooks here
+            call.respond(HttpStatusCode.OK)
         }
     }
 }
