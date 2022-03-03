@@ -15,7 +15,7 @@ class BotLogic(private val state: BotLogicState = BotLogicState()) {
 }
 
 data class BotLogicState(
-    var userLang: Lang? = null,
+    var userLang: String? = null,
     var userName: String? = null,
     var stateFine: Boolean? = null
 )
