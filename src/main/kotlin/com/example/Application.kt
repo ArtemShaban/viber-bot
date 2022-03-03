@@ -20,7 +20,11 @@ fun Application.module(testing: Boolean = false) {
         }
 
         get("/webhook") {
-            call.respond(HttpStatusCode.OK, "Auto deploy is working!")
+            call.respond(HttpStatusCode.OK, "Get webhook!")
+        }
+
+        post("/webhook") {
+            call.respond(HttpStatusCode.OK, "Post webhook!")
         }
 
         get("/register_webhook") {
