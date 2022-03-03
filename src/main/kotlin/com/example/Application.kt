@@ -29,7 +29,7 @@ fun Application.module(testing: Boolean = false) {
 
         post("/webhook") {
             val body = call.receiveText()
-            logger.info { "Webhook received: $call\n$body" }
+            logger.info { "Webhook received: $call $body" }
 
             //todo handle webhooks here
 
