@@ -12,7 +12,9 @@ data class WelcomeMessage(
     val text: String,
 
     @Json(name = "tracking_data")
-    val trackingData: String
+    val trackingData: String,
+
+    val keyboard: Keyboard,
 ) {
     public fun toJson() = klaxon.toJsonString(this)
 
@@ -20,4 +22,5 @@ data class WelcomeMessage(
         public fun fromJson(json: String) = klaxon.parse<WelcomeMessage>(json)
     }
 }
+
 

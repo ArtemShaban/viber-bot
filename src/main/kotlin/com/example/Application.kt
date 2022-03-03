@@ -1,9 +1,7 @@
 package com.example
 
 import com.beust.klaxon.Klaxon
-import com.example.api.model.ConversationStartedEvent
-import com.example.api.model.Sender
-import com.example.api.model.WelcomeMessage
+import com.example.api.model.*
 import io.ktor.application.*
 import io.ktor.client.call.*
 import io.ktor.http.*
@@ -56,6 +54,24 @@ fun Application.module(testing: Boolean = false) {
 }
 
 fun handleConversationStarted(event: ConversationStartedEvent): String {
-    val welcomeMessage = WelcomeMessage(Sender("Артем Шабан"), "text", "Привет, ${event.user.name}", "lang-ua")
-    return klaxon.toJsonString(welcomeMessage)
+    val welcomeMessage = WelcomeMessage(
+        Sender("Чат бот"),
+        "text",
+        "Доброго дня! Дякуємо, що звернулися до нашої служби #психологічної підтримки!\n" +
+                "Наші спеціалісти готові вам надати допомогу в зручному для вас форматі, який допоможе визначити Я чат-бот.",
+        "lang-ua",
+        Keyboard(
+            type = "keyboard",
+            defaultHeight = false,
+            listOf(
+                Button(
+                    actionType = "reply",
+                    actionBody = "reply to me",
+                    text = "Key text",
+                    textSize = "regular"
+                )
+            )
+        )
+    )
+    return welcomeMessage.toJson()
 }
