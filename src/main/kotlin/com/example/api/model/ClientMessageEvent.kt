@@ -10,6 +10,6 @@ data class ClientMessageEvent (
 
 data class EventMessage (
     @Json(name = "tracking_data")
-    val trackingData: String,
-    val text: String
+    val trackingData: String? = null,
+    val text: String? = null
     )

@@ -46,9 +46,10 @@ fun Application.module(testing: Boolean = false) {
                 }
                 "message" -> {
                     val message = klaxon.parse<ClientMessageEvent>(StringReader(body))
-                    if (message != null) {
+                    logger.debug { "Message event: $message"}
+                    if (message != null && message.message.trackingData!= null) {
                         val state = klaxon.parse<BotLogicState>(StringReader(message.message.trackingData))
-                        logger.debug { "Message event: $message, state: $state" }
+                        logger.debug { "Message event state: $state" }
                         response = ""
                     } else {
                         TODO()
