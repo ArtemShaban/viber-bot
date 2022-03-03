@@ -73,12 +73,8 @@ private fun newMessage(userRequest: UserRequest<*, *>): String {
     val message = WelcomeMessage(
         sender = Sender(Constants.senderName),
         type = "text",
-        text = "Доброго дня!" +
-                "\nДякуємо, що звернулися до нашої служби #психологічної підтримки!" +
-                "\nНаші спеціалісти готові вам надати допомогу в зручному для вас форматі, який допоможе визначити Я чат-бот." +
-                "\n\nВибери мову спілкування" +
-                "\nChoose language",
-        trackingData = "choose_lang_stage",
+        text = userRequest.getMessage(),
+        trackingData = klaxon.toJsonString(userRequest.state),
         keyboard = keyboard
     )
     return message.toJson()

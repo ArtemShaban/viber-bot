@@ -4,8 +4,11 @@ import com.example.logic.BotLogicState
 
 class WelcomeRequest(state: BotLogicState) : UserRequest<Lang, Lang>(state) {
     override fun getMessage(): String {
-        return "Доброго дня! Дякуємо, що звернулися до нашої служби #психологічної підтримки!\n" +
-                "Наші спеціалісти готові вам надати допомогу в зручному для вас форматі, який допоможе визначити Я чат-бот. \n"
+        return "Доброго дня!" +
+                "\nДякуємо, що звернулися до нашої служби #психологічної підтримки!" +
+                "\nНаші спеціалісти готові вам надати допомогу в зручному для вас форматі, який допоможе визначити Я чат-бот." +
+                "\n\nВибери мову спілкування" +
+                "\nChoose language"
     }
 
     override fun getOptions(): Map<Lang, String> {
