@@ -15,6 +15,8 @@ data class WelcomeMessage(
     val trackingData: String,
 
     val keyboard: Keyboard,
+    @Json(name = "min_api_version")
+    val minApiVersion: Int = 4
 ) {
     public fun toJson() = klaxon.toJsonString(this)
 

@@ -66,24 +66,22 @@ fun handleConversationStarted(event: ConversationStartedEvent): String {
         Keyboard(
             type = "keyboard",
             defaultHeight = false,
+            inputFieldState = "hidden",
             listOf(
                 Button(
                     actionType = "reply",
                     actionBody = "ua",
                     text = "\uD83C\uDDFA\uD83C\uDDE6",
-                    textSize = "large",
                 ),
                 Button(
                     actionType = "reply",
                     actionBody = "en",
                     text = "\uD83C\uDDFA\uD83C\uDDF8",
-                    textSize = "large",
                 ),
                 Button(
                     actionType = "reply",
                     actionBody = "ru",
-                    text = "\uD83C\uDDF7\uD83C\uDDFA",
-                    textSize = "large",
+                    text = "\uD83C\uDDF7\uD83C\uDDFA"
                 ),
             )
         )

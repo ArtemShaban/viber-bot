@@ -13,7 +13,10 @@ data class Button(
     val text: String,
 
     @Json(name = "TextSize")
-    val textSize: String,
+    val textSize: String = "large",
+
+    @Json(name = "BgColor")
+    val bgColor: String = "#7360f2"
 
 //    @Json(name = "Image")
 //    val image: String = "",
