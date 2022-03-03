@@ -1,1 +1,1 @@
-web: java -jar build/libs/viber-bot-0.0.1-all.jar -port=$PORT
+web: ./build/install/viber-bot/bin/viber-bot
