@@ -50,7 +50,7 @@ fun Application.module(testing: Boolean = false) {
                     logger.warn { "Unhandled event: $event" }
                 }
             }
-
+            logger.debug { "Sending response: $response" }
             call.respond(HttpStatusCode.OK, response)
         }
     }
@@ -74,7 +74,7 @@ private fun newMessage(userRequest: UserRequest<*, *>): String {
         sender = Sender(Constants.senderName),
         type = "text",
         text = userRequest.getMessage(),
-        trackingData = klaxon.toJsonString(userRequest.state),
+        trackingData = "klaxon.toJsonString(userRequest.state)",
         keyboard = keyboard
     )
     return message.toJson()
