@@ -1,9 +1,11 @@
 package com.example.logic.request
 
-class EnterNameRequest(private val lang: Lang) : UserRequest<EnterNameRequest.Option, String> {
+import com.example.logic.BotLogicState
+
+class EnterNameRequest(state: BotLogicState) : UserRequest<EnterNameRequest.Option, String>(state) {
 
     override fun getMessage(): String {
-        return when (lang) {
+        return when (state.userLang!!) {
             Lang.UK -> "Як я можу до вас звертатись? \n" +
                     "(Вкажи нижче своє імʼя або нік)\n"
             Lang.RU -> "Как я могу к вам обращаться? \n" +
