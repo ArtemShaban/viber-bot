@@ -13,7 +13,7 @@ data class ConversationStartedEvent(
     val messageToken: Long,
 
     val type: String,
-    val context: String = "", //context is optional field
+    val context: String? = null, //optional
     val user: User,
     val subscribed: Boolean
 ) {

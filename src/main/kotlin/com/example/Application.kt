@@ -2,6 +2,8 @@ package com.example
 
 import com.beust.klaxon.Klaxon
 import com.example.api.model.ConversationStartedEvent
+import com.example.api.model.Sender
+import com.example.api.model.WelcomeMessage
 import io.ktor.application.*
 import io.ktor.client.call.*
 import io.ktor.http.*
@@ -12,11 +14,11 @@ import mu.KotlinLogging
 import java.io.StringReader
 
 private val logger = KotlinLogging.logger { }
+private val klaxon = Klaxon()
 
 fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
 
 fun Application.module(testing: Boolean = false) {
-    val klaxon = Klaxon()
 
     routing {
         get("/") {
@@ -36,18 +38,24 @@ fun Application.module(testing: Boolean = false) {
             logger.info { "Webhook received: $call $body" }
 
             val parsed = klaxon.parseJsonObject(StringReader(body))
+            val response: String
             when (val event = parsed["event"]) {
-                "conversation_started" -> handleConversationStarted(klaxon.parse<ConversationStartedEvent>(body)!!)
+                "conversation_started" -> {
+                    response = handleConversationStarted(klaxon.parse<ConversationStartedEvent>(body)!!)
+                }
                 //todo handle all events
-                else -> logger.warn { "Unhandled event: $event" }
+                else -> {
+                    response = ""
+                    logger.warn { "Unhandled event: $event" }
+                }
             }
 
-            call.respond(HttpStatusCode.OK)
+            call.respond(HttpStatusCode.OK, response)
         }
     }
 }
 
-fun handleConversationStarted(event: ConversationStartedEvent) {
-    logger.info { "handleConversationStarted" }
-    //TODO("Implement")
+fun handleConversationStarted(event: ConversationStartedEvent): String {
+    val welcomeMessage = WelcomeMessage(Sender("Артем Шабан"), "text", "Привет, ${event.user.name}", "lang-ua")
+    return klaxon.toJsonString(welcomeMessage)
 }
