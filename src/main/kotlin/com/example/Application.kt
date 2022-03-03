@@ -15,5 +15,9 @@ fun Application.module(testing: Boolean = false) {
         get("/hi") {
             call.respondText("hi!")
         }
+
+        get("/test") {
+            call.respondText("Auto deploy is working!")
+        }
     }
 }
