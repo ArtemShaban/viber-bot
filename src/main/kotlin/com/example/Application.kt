@@ -4,6 +4,7 @@ import com.beust.klaxon.Klaxon
 import com.example.api.model.*
 import com.example.logic.BotLogic
 import com.example.logic.BotLogicState
+import com.example.logic.processState
 import com.example.logic.request.UserRequest
 import io.ktor.application.*
 import io.ktor.client.call.*
@@ -46,11 +47,8 @@ fun Application.module(testing: Boolean = false) {
                 }
                 "message" -> {
                     val message = klaxon.parse<ClientMessageEvent>(StringReader(body))
-                    logger.debug { "Message event: $message"}
-                    if (message != null && message.message.trackingData!= null) {
-                        val state = klaxon.parse<BotLogicState>(StringReader(message.message.trackingData))
-                        logger.debug { "Message event state: $state" }
-                        response = ""
+                    if (message != null) {
+                        response = handleClientMessage(message)
                     } else {
                         TODO()
                     }
@@ -67,6 +65,15 @@ fun Application.module(testing: Boolean = false) {
     }
 }
 
+fun handleClientMessage(event :ClientMessageEvent): String {
+    var response = ""
+    if (event.message.trackingData!= null) {
+        val state = processState(klaxon.parse<BotLogicState>(StringReader(event.message.trackingData))!!, event.message.text!!)
+        response = newMessage(BotLogic(state).getNextUserRequest())
+    }
+    return response
+}
+
 fun handleConversationStarted(event: ConversationStartedEvent): String {
     logger.debug { "Handle conversation started event: $event" }
     return newMessage(BotLogic().getNextUserRequest())
@@ -74,13 +81,22 @@ fun handleConversationStarted(event: ConversationStartedEvent): String {
 
 
 private fun newMessage(userRequest: UserRequest<*, *>): String {
-    val buttons = userRequest.getOptions().map { Button(actionType = "reply", actionBody = it.key.name, text = it.value) }
-    val keyboard = Keyboard(
-        type = "keyboard",
-        defaultHeight = false,
-        inputFieldState = "hidden",
-        buttons = buttons
-    )
+    val buttons = if (userRequest.getOptions().isNotEmpty()) {
+        userRequest.getOptions()
+            .map { Button(actionType = "reply", actionBody = it.key.name, text = it.value) }
+    } else {
+        null
+    }
+    val keyboard = if (buttons != null) {
+        Keyboard(
+            type = "keyboard",
+            defaultHeight = false,
+            inputFieldState = "hidden",
+            buttons = buttons
+        )
+    } else {
+        null
+    }
     val message = WelcomeMessage(
         sender = Sender(Constants.senderName),
         type = "text",

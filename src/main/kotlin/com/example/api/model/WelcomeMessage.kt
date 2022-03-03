@@ -14,7 +14,7 @@ data class WelcomeMessage(
     @Json(name = "tracking_data")
     val trackingData: String,
 
-    val keyboard: Keyboard,
+    val keyboard: Keyboard? = null,
     @Json(name = "min_api_version")
     val minApiVersion: Int = 4
 ) {
