@@ -2,6 +2,7 @@ package com.example
 
 import io.ktor.application.*
 import io.ktor.client.call.*
+import io.ktor.http.*
 import io.ktor.response.*
 import io.ktor.routing.*
 
@@ -19,7 +20,7 @@ fun Application.module(testing: Boolean = false) {
         }
 
         get("/webhook") {
-            call.respondText("Auto deploy is working!")
+            call.respond(HttpStatusCode.OK, "Auto deploy is working!")
         }
 
         get("/register_webhook") {
