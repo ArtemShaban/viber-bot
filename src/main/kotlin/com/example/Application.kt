@@ -3,8 +3,12 @@ package com.example
 import io.ktor.application.*
 import io.ktor.client.call.*
 import io.ktor.http.*
+import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.routing.*
+import mu.KotlinLogging
+
+private val logger = KotlinLogging.logger { }
 
 fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
 
@@ -24,7 +28,11 @@ fun Application.module(testing: Boolean = false) {
         }
 
         post("/webhook") {
+            val body = call.receiveText()
+            logger.info { "Webhook received: $call\n$body" }
+
             //todo handle webhooks here
+
             call.respond(HttpStatusCode.OK)
         }
     }
