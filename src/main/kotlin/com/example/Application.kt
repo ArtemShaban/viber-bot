@@ -11,5 +11,9 @@ fun Application.module(testing: Boolean = false) {
         get("/") {
             call.respondText("Hello, world!")
         }
+
+        get("/hi") {
+            call.respondText("hi!")
+        }
     }
 }
