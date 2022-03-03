@@ -69,24 +69,21 @@ fun handleConversationStarted(event: ConversationStartedEvent): String {
             listOf(
                 Button(
                     actionType = "reply",
-                    actionBody = "Українська",
+                    actionBody = "ua",
                     text = "\uD83C\uDDFA\uD83C\uDDE6",
                     textSize = "large",
-//                    image = "https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/240/google/313/flag-ukraine_1f1fa-1f1e6.png"
                 ),
                 Button(
                     actionType = "reply",
-                    actionBody = "English",
+                    actionBody = "en",
                     text = "\uD83C\uDDFA\uD83C\uDDF8",
                     textSize = "large",
-//                    image = "https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/240/google/313/flag-united-states_1f1fa-1f1f8.png"
                 ),
                 Button(
                     actionType = "reply",
-                    actionBody = "Русский",
+                    actionBody = "ru",
                     text = "\uD83C\uDDF7\uD83C\uDDFA",
                     textSize = "large",
-//                    image = "https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/240/google/313/flag-russia_1f1f7-1f1fa.png"
                 ),
             )
         )
