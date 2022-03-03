@@ -13,5 +13,8 @@ data class Button(
     val text: String,
 
     @Json(name = "TextSize")
-    val textSize: String
+    val textSize: String,
+
+    @Json(name = "Image")
+    val image: String,
 )
