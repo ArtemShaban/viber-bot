@@ -2,7 +2,7 @@ package com.example.logic.request
 
 import com.example.logic.BotLogicState
 
-class WelcomeRequest(state: BotLogicState) : UserRequest<Lang, Lang>(state) {
+class WelcomeRequest(state: BotLogicState) : UserRequest<Lang>(state) {
     override fun getMessage(): String {
         return "Доброго дня!" +
                 "\nДякуємо, що звернулися до нашої служби #психологічної підтримки!" +
@@ -17,9 +17,5 @@ class WelcomeRequest(state: BotLogicState) : UserRequest<Lang, Lang>(state) {
             Pair(Lang.EN, "English \uD83C\uDDFA\uD83C\uDDF8"),
             Pair(Lang.RU, "Русский \uD83C\uDDF7\uD83C\uDDFA"),
         )
-    }
-
-    override fun createResponse(responseData: Lang): Response<Lang> {
-        return Response(this, responseData)
     }
 }

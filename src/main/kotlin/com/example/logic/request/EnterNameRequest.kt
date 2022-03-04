@@ -2,7 +2,7 @@ package com.example.logic.request
 
 import com.example.logic.BotLogicState
 
-class EnterNameRequest(state: BotLogicState) : UserRequest<EnterNameRequest.Option, String>(state) {
+class EnterNameRequest(state: BotLogicState) : UserRequest<EnterNameRequest.Option>(state) {
 
     override fun getMessage(): String {
         return when (Lang.valueOf(state.userLang!!)) {
@@ -19,8 +19,4 @@ class EnterNameRequest(state: BotLogicState) : UserRequest<EnterNameRequest.Opti
     }
 
     enum class Option : UserMessage
-
-    override fun createResponse(responseData: String): Response<String> {
-        return Response(this, responseData)
-    }
 }

@@ -2,7 +2,7 @@ package com.example.logic.request
 
 import com.example.logic.BotLogicState
 
-class CheckStateRequest(state: BotLogicState) : UserRequest<CheckStateRequest.Option, CheckStateRequest.Option>(state) {
+class CheckStateRequest(state: BotLogicState) : UserRequest<CheckStateRequest.Option>(state) {
 
     override fun getMessage(): String {
         return when (Lang.valueOf(state.userLang!!)) {
@@ -29,10 +29,6 @@ class CheckStateRequest(state: BotLogicState) : UserRequest<CheckStateRequest.Op
             Pair(Option.EMERGENCY, getOptionMessage(Option.EMERGENCY)),
             Pair(Option.FINE, getOptionMessage(Option.FINE))
         )
-    }
-
-    override fun createResponse(responseData: Option): Response<Option> {
-        return Response(this, responseData)
     }
 
     private fun getOptionMessage(option: Option): String {
