@@ -9,20 +9,13 @@ class ViberApiSender {
     private val client = HttpClient(CIO)
     private val AUTH_HEADER_NAME = "X-Viber-Auth-Token"
 
-    suspend fun sendMessage(): HttpResponse {
-        val response: HttpResponse = client.post("https://chatapi.viber.com/pa/set_webhook") {
+    suspend fun sendMessage(messageBody: String): HttpResponse {
+        val response: HttpResponse = client.post("https://chatapi.viber.com/pa/send_message") {
             headers {
                 append(AUTH_HEADER_NAME, getAuthToken())
             }
-            body = """
-            {
-               "url":"https://viber-bot-ua.herokuapp.com/webhook",
-               "send_name": true,
-               "send_photo": true
-            }
-            """
+            body = messageBody
         }
-
         return response
     }
 

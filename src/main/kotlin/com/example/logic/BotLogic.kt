@@ -17,11 +17,12 @@ class BotLogic(private val state: BotLogicState = BotLogicState()) {
     }
 }
 
-fun processState(state: BotLogicState, text: String): BotLogicState {
+fun updateState(state: BotLogicState, newInput: String): BotLogicState {
     when {
-        state.userLang == null -> state.userLang = text
-        state.userName == null -> state.userName = text
-        state.stateFine == null -> state.stateFine = true //TODO identify boolean value and make logic for emergency call
+        state.userLang == null -> state.userLang = newInput
+        state.userName == null -> state.userName = newInput
+        state.stateFine == null -> state.stateFine =
+            true //TODO identify boolean value and make logic for emergency call
     }
     return state
 }

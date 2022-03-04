@@ -5,8 +5,8 @@ import com.example.api.model.*
 import com.example.api.sender.ViberApiSender
 import com.example.logic.BotLogic
 import com.example.logic.BotLogicState
-import com.example.logic.processState
 import com.example.logic.request.UserRequest
+import com.example.logic.updateState
 import io.ktor.application.*
 import io.ktor.client.call.*
 import io.ktor.http.*
@@ -42,22 +42,25 @@ fun Application.module(testing: Boolean = false) {
             logger.info { "Webhook received: $call $body" }
 
             val parsed = klaxon.parseJsonObject(StringReader(body))
-            val response: String
+            var response = ""
             when (val event = parsed["event"]) {
                 "conversation_started" -> {
-                    response = handleConversationStarted(klaxon.parse<ConversationStartedEvent>(body)!!)
+                    val conversationStartedEvent = klaxon.parse<ConversationStartedEvent>(body)!!
+                    response = handleConversationStarted(conversationStartedEvent)
                 }
                 "message" -> {
-                    val message = klaxon.parse<ClientMessageEvent>(StringReader(body))
-                    if (message != null) {
-                        response = handleClientMessage(message)
+                    val clientMessageEvent = klaxon.parse<ClientMessageEvent>(body)
+                    if (clientMessageEvent != null) {
+                        handleClientMessage(clientMessageEvent, viberApiSender)
                     } else {
+                        logger.error { "Can not parse clientMessageEvent: $body" }
+
+                        //?????when it possible
                         TODO()
                     }
                 }
                 //todo handle all events
                 else -> {
-                    response = ""
                     logger.warn { "Unhandled event: $event" }
                 }
             }
@@ -67,21 +70,23 @@ fun Application.module(testing: Boolean = false) {
     }
 }
 
-fun handleClientMessage(event: ClientMessageEvent): String {
-    var response = ""
-    if (event.message.trackingData != null) {
-        val state =
-            processState(klaxon.parse<BotLogicState>(StringReader(event.message.trackingData))!!, event.message.text!!)
-        response = newMessage(BotLogic(state).getNextUserRequest(), event.sender.id)
-    }
-    return response
-}
-
 fun handleConversationStarted(event: ConversationStartedEvent): String {
     logger.debug { "Handle conversation started event: $event" }
     return newMessage(BotLogic().getNextUserRequest())
 }
 
+suspend fun handleClientMessage(event: ClientMessageEvent, viberApiSender: ViberApiSender) {
+    if (event.message.trackingData != null) {
+        val oldState = klaxon.parse<BotLogicState>(event.message.trackingData)!!
+        val newState = updateState(oldState, newInput = event.message.text!!)
+        val clientMessageRequestBody = newMessage(BotLogic(newState).getNextUserRequest(), event.sender.id)
+
+        viberApiSender.sendMessage(clientMessageRequestBody)
+    } else {
+        logger.warn { "Tracking data is empty in ClientMessageEvent" }
+    }
+
+}
 
 private fun newMessage(userRequest: UserRequest<*, *>, receiverId: String? = null): String {
     val buttons = if (userRequest.getOptions().isNotEmpty()) {
@@ -101,7 +106,7 @@ private fun newMessage(userRequest: UserRequest<*, *>, receiverId: String? = nul
         null
     }
     val message: Any = if (keyboard != null) {
-        WelcomeMessage(
+        MessageWithKeyboard(
             receiver = receiverId,
             sender = Sender(Constants.senderName),
             type = "text",
