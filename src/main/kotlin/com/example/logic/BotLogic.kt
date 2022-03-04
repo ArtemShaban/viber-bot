@@ -31,7 +31,8 @@ fun updateState(state: BotLogicState, newInput: String): BotLogicState {
     when {
         state.userLang == null -> state.userLang = newInput
         state.userName == null -> state.userName = newInput
-        state.stateFine == null -> state.stateFine = true//TODO
+        state.stateFine == null -> state.stateFine =
+            if (CheckStateRequest.Option.FINE.name == newInput) true else null
         state.stressLevel == null -> state.stressLevel =
             newInput.toInt() //todo need to validate, if not int - send a message.
         state.stressSource == null -> state.stressSource = newInput
