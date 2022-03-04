@@ -16,17 +16,23 @@ class BotLogic(private val state: BotLogicState = BotLogicState()) {
             state.contactType == null -> ContactTypeRequest(state)
 
             state.finished != null -> null
-            state.phoneNumber != null -> FinishBotRequest(state)
+            state.phoneNumber != null -> handleFinishedState(state)
 
             //ask for phone number
             ContactType.PHONE_CALL == ContactType.get(state) -> EnterPhoneRequest(state)
 
             //show finish page for Viber and Zoom contact types
-            ContactType.VIBER_CHAT == ContactType.get(state) || ContactType.ZOOM_MEETING == ContactType.get(state) ->
-                FinishBotRequest(state)
+            ContactType.VIBER_CHAT == ContactType.get(state) || ContactType.ZOOM_MEETING == ContactType.get(
+                state
+            ) -> handleFinishedState(state)
 
             else -> WelcomeRequest(state)
         }
+    }
+
+    private fun handleFinishedState(state: BotLogicState): FinishBotRequest {
+        EmailLogic().sendEmail(state) //Send email when user finished all bot steps.
+        return FinishBotRequest(state)
     }
 }
 
@@ -46,7 +52,6 @@ fun updateState(state: BotLogicState, newInput: String): BotLogicState? {
             newInput
         state.finished == null -> {
             state.finished = true
-            EmailLogic().sendEmail(state) //Send email when user finished all bot steps.
             if (FinishBotRequest.Option.RESTART.name == newInput) return null
         }
     }
