@@ -30,7 +30,7 @@ class BotLogic(private val state: BotLogicState = BotLogicState()) {
     }
 }
 
-fun updateState(state: BotLogicState, newInput: String): BotLogicState {
+fun updateState(state: BotLogicState, newInput: String): BotLogicState? {
     when {
         state.userLang == null -> state.userLang = newInput
         state.userName == null -> state.userName = newInput
@@ -48,6 +48,8 @@ fun updateState(state: BotLogicState, newInput: String): BotLogicState {
             state.finished = true
             EmailLogic().sendEmail(state) //Send email when user finished all bot steps.
         }
+
+        FinishBotRequest.Option.RESTART.name == newInput -> return null
     }
     return state
 }

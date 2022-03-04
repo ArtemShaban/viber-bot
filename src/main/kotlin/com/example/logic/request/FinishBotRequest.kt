@@ -4,6 +4,7 @@ import com.example.logic.BotLogicState
 
 class FinishBotRequest(state: BotLogicState) : UserRequest<FinishBotRequest.Option>(state) {
     enum class Option : UserOption {
+        RESTART,
         VIBER {
             override fun getUrl(): String {
                 return "https://invite.viber.com/?g2=AQAGX5EYp8g%2Fx07ONU9p%2B12mDlPDHB1LVH2OUAzqjH81OLrAx54%2FLk4JEeELq5Jk"
@@ -37,18 +38,25 @@ class FinishBotRequest(state: BotLogicState) : UserRequest<FinishBotRequest.Opti
     }
 
     override fun getOptions(): Map<Option, String> {
-        return when (ContactTypeRequest.ContactType.get(state)) {
-            ContactTypeRequest.ContactType.PHONE_CALL -> emptyMap()
+        val option = when (ContactTypeRequest.ContactType.get(state)) {
             ContactTypeRequest.ContactType.VIBER_CHAT -> when (Lang.valueOf(state.userLang!!)) {
-                Lang.UA -> mapOf(Pair(Option.VIBER, "перейти в Viber кімнату"))
-                Lang.RU -> mapOf(Pair(Option.VIBER, "перейти в Viber комнату"))
-                Lang.EN -> mapOf(Pair(Option.VIBER, "follow Viber room"))
+                Lang.UA -> Pair(Option.VIBER, "перейти в Viber кімнату")
+                Lang.RU -> Pair(Option.VIBER, "перейти в Viber комнату")
+                Lang.EN -> Pair(Option.VIBER, "follow Viber room")
             }
             ContactTypeRequest.ContactType.ZOOM_MEETING -> when (Lang.valueOf(state.userLang!!)) {
-                Lang.UA -> mapOf(Pair(Option.ZOOM, "перейти в Zoom кімнату"))
-                Lang.RU -> mapOf(Pair(Option.ZOOM, "перейти в Zoom комнату"))
-                Lang.EN -> mapOf(Pair(Option.ZOOM, "follow Zoom room"))
+                Lang.UA -> Pair(Option.ZOOM, "перейти в Zoom кімнату")
+                Lang.RU -> Pair(Option.ZOOM, "перейти в Zoom комнату")
+                Lang.EN -> Pair(Option.ZOOM, "follow Zoom room")
             }
+            else -> null
         }
+        val options = if (option != null) mutableMapOf(option) else mutableMapOf()
+        options[Option.RESTART] = when (Lang.valueOf(state.userLang!!)) {
+            Lang.UA -> "почати спочатку"
+            Lang.RU -> "начать с начала"
+            Lang.EN -> "start from beginning"
+        }
+        return options
     }
 }
