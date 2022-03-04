@@ -91,7 +91,7 @@ suspend fun handleClientMessage(event: ClientMessageEvent, viberApiSender: Viber
     viberApiSender.sendMessage(messageBodyToSend)
 }
 
-private fun newMessage(userRequest: UserRequest<*, *>, receiverId: String? = null): String {
+private fun newMessage(userRequest: UserRequest<*>, receiverId: String? = null): String {
     val buttons = if (userRequest.getOptions().isNotEmpty()) {
         userRequest.getOptions()
             .map { Button(actionType = "reply", actionBody = it.key.name, text = it.value) }

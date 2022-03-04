@@ -6,7 +6,7 @@ interface UserMessage {
     fun getMessage(): String
 }
 
-abstract class UserRequest<TOption>(val state: BotLogicState) : UserMessage {
+abstract class UserRequest<TOption : Enum<TOption>>(val state: BotLogicState) : UserMessage {
     abstract fun getOptions(): Map<TOption, String>
 }
 

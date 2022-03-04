@@ -7,7 +7,7 @@ import com.example.logic.request.WelcomeRequest
 
 class BotLogic(private val state: BotLogicState = BotLogicState()) {
 
-    fun getNextUserRequest(): UserRequest<*, *> {
+    fun getNextUserRequest(): UserRequest<*> {
         return when {
             state.userLang == null -> WelcomeRequest(state)
             state.userName == null -> EnterNameRequest(state)
