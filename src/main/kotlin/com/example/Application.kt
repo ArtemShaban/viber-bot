@@ -39,7 +39,7 @@ fun Application.module(testing: Boolean = false) {
 
         post("/webhook") {
             val body = call.receiveText()
-            logger.info { "Webhook received: $call $body" }
+            logger.trace { "Webhook received: $call $body" }
 
             val parsed = klaxon.parseJsonObject(StringReader(body))
             var response = ""
@@ -77,17 +77,18 @@ fun handleConversationStarted(event: ConversationStartedEvent): String {
 
 suspend fun handleClientMessage(event: ClientMessageEvent, viberApiSender: ViberApiSender) {
     logger.debug { "Handling client message event: $event" }
-    if (event.message.trackingData != null) {
-        val oldState = klaxon.parse<BotLogicState>(event.message.trackingData)!!
-        val newState = updateState(oldState, newInput = event.message.text!!)
-        val clientMessageRequestBody = newMessage(BotLogic(newState).getNextUserRequest(), event.sender.id)
 
-        viberApiSender.sendMessage(clientMessageRequestBody)
-    } else {
-        //if not tracking data, start from the beginning
-        val welcomeMessage = newMessage(BotLogic().getNextUserRequest(), event.sender.id)
-        viberApiSender.sendMessage(welcomeMessage)
-    }
+    val messageBodyToSend: String =
+        if (event.message.trackingData != null) {
+            val oldState = klaxon.parse<BotLogicState>(event.message.trackingData)!!
+            val newState = updateState(oldState, newInput = event.message.text!!)
+            newMessage(BotLogic(newState).getNextUserRequest(), event.sender.id)
+        } else {
+            //if not tracking data, start from the beginning
+            newMessage(BotLogic().getNextUserRequest(), event.sender.id)
+        }
+
+    viberApiSender.sendMessage(messageBodyToSend)
 }
 
 private fun newMessage(userRequest: UserRequest<*, *>, receiverId: String? = null): String {
