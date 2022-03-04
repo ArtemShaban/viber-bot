@@ -11,6 +11,7 @@ class BotLogic(private val state: BotLogicState = BotLogicState()) {
             state.stateFine == null -> CheckStateRequest(state)
             state.stressLevel == null -> RateLevelRequest(state)
             state.stressSource == null -> ChooseSourceRequest(state)
+            state.contactType == null -> ContactTypeRequest(state)
             else -> WelcomeRequest(state)
         }
     }
@@ -23,6 +24,7 @@ fun updateState(state: BotLogicState, newInput: String): BotLogicState {
         state.stateFine == null -> state.stateFine = true//TODO
         state.stressLevel == null -> state.stressLevel = newInput.toInt()
         state.stressSource == null -> state.stressSource = newInput
+        state.contactType == null -> state.contactType = newInput
     }
     return state
 }
@@ -32,5 +34,6 @@ data class BotLogicState(
     var userName: String? = null,
     var stateFine: Boolean? = null,
     var stressLevel: Int? = null,
-    var stressSource: String? = null
+    var stressSource: String? = null,
+    var contactType: String? = null
 )
