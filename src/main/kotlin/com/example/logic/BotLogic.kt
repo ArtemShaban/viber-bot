@@ -1,7 +1,7 @@
 package com.example.logic
 
-import com.example.email.EmailSender
 import com.example.logic.request.*
+import com.example.logic.request.ContactTypeRequest.ContactType
 
 class BotLogic(private val state: BotLogicState = BotLogicState()) {
 
@@ -15,23 +15,20 @@ class BotLogic(private val state: BotLogicState = BotLogicState()) {
             state.contactType == null -> ContactTypeRequest(state)
 
             state.phoneNumber != null -> {
-                sendEmail(state) //Send email if user asked help by phone call
+                EmailLogic().sendEmail(state) //Send email if user asked help by phone call
                 FinishBotRequest(state)
             }
 
-            ContactTypeRequest.Option.getContactType(state) == ContactTypeRequest.Option.PHONE_CALL -> EnterPhoneRequest(
-                state
-            )
+            //ask for phone number
+            ContactType.PHONE_CALL == ContactType.get(state) -> EnterPhoneRequest(state)
 
-            ContactTypeRequest.Option.getContactType(state) == ContactTypeRequest.Option.VIBER_CHAT
-                    || ContactTypeRequest.Option.getContactType(state) == ContactTypeRequest.Option.ZOOM_MEETING -> FinishBotRequest(
-                state
-            )
+            //show finish page for Viber and Zoom contact types
+            ContactType.VIBER_CHAT == ContactType.get(state) || ContactType.ZOOM_MEETING == ContactType.get(state) ->
+                FinishBotRequest(state)
+
             else -> WelcomeRequest(state)
         }
     }
-
-
 }
 
 fun updateState(state: BotLogicState, newInput: String): BotLogicState {
@@ -47,32 +44,6 @@ fun updateState(state: BotLogicState, newInput: String): BotLogicState {
         state.phoneNumber == null -> state.phoneNumber = newInput
     }
     return state
-}
-
-private fun sendEmail(state: BotLogicState) {
-    val stressSource = ChooseSourceRequest.Option.valueOf(state.stressSource!!)
-    val stressSourceAnswer = ChooseSourceRequest(state).getOptions()[stressSource]
-
-    val contactType = ContactTypeRequest.Option.valueOf(state.contactType!!)
-    val contactTypeAnswer = ContactTypeRequest(state).getOptions()[contactType]
-
-    EmailSender()
-        .sendEmail(
-            "my.psycholog.help@gmail.com",
-            "Запрос на психологическую помощь из viber чат бота",
-            """
-                    ${state.userName} запросил помощь через чат-бот. Номер телефона: ${state.phoneNumber}
-                    
-                    Анкета:
-                    имя - ${state.userName}
-                    состояние - ${if (state.stateFine!!) "я ок, держусь" else "экстренная помощь"}
-                    уровень стресса - ${state.stressLevel}
-                    источник стресса - $stressSourceAnswer 
-                    тип связи - $contactTypeAnswer
-                    номер телефона - ${state.phoneNumber}
-                    язык - ${state.userLang}    
-                    """
-        )
 }
 
 data class BotLogicState(
