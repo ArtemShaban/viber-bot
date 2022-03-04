@@ -64,8 +64,7 @@ class FinishBotRequest(state: BotLogicState) : UserRequest<FinishBotRequest.Opti
     private fun sendEmail(state: BotLogicState) {
         EmailSender()
             .sendEmail(
-//                "my.psycholog.help@gmail.com",
-                "artemshaban@gmail.com",
+                "my.psycholog.help@gmail.com",
                 "Запрос на психологическую помощь из viber чат бота",
                 "${state.userName} запросил помощь через чат-бот. Номер телефона: ${state.phoneNumber}"
             )
