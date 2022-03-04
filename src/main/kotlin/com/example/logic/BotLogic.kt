@@ -5,11 +5,12 @@ import com.example.logic.request.ContactTypeRequest.ContactType
 
 class BotLogic(private val state: BotLogicState = BotLogicState()) {
 
-    fun getNextUserRequest(): UserRequest<*> {
+    fun getNextUserRequest(): UserRequest<*>? {
         return when {
             state.userLang == null -> WelcomeRequest(state)
             state.userName == null -> EnterNameRequest(state)
-            state.stateFine == null -> CheckStateRequest(state)
+            state.state == null -> CheckStateRequest(state)
+            state.stateFine == null -> null
             state.stressLevel == null -> RateLevelRequest(state)
             state.stressSource == null -> ChooseSourceRequest(state)
             state.contactType == null -> ContactTypeRequest(state)
@@ -35,8 +36,10 @@ fun updateState(state: BotLogicState, newInput: String): BotLogicState {
     when {
         state.userLang == null -> state.userLang = newInput
         state.userName == null -> state.userName = newInput
-        state.stateFine == null -> state.stateFine =
-            if (CheckStateRequest.Option.FINE.name == newInput) true else null
+        state.stateFine == null -> {
+            state.state = newInput
+            state.stateFine = if (CheckStateRequest.Option.FINE.name == state.state) true else null
+        }
         state.stressLevel == null -> state.stressLevel =
             newInput.toInt() //todo need to validate, if not int - send a message.
         state.stressSource == null -> state.stressSource = newInput
@@ -49,6 +52,7 @@ fun updateState(state: BotLogicState, newInput: String): BotLogicState {
 data class BotLogicState(
     var userLang: String? = null,
     var userName: String? = null,
+    var state: String? = null,
     var stateFine: Boolean? = null,
     var stressLevel: Int? = null,
     var stressSource: String? = null,
