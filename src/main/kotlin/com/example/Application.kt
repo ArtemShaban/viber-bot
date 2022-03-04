@@ -83,9 +83,10 @@ suspend fun handleClientMessage(event: ClientMessageEvent, viberApiSender: Viber
 
         viberApiSender.sendMessage(clientMessageRequestBody)
     } else {
-        logger.warn { "Tracking data is empty in ClientMessageEvent" }
+        //if not tracking data, start from the beginning
+        val welcomeMessage = newMessage(BotLogic().getNextUserRequest(), event.sender.id)
+        viberApiSender.sendMessage(welcomeMessage)
     }
-
 }
 
 private fun newMessage(userRequest: UserRequest<*, *>, receiverId: String? = null): String {
