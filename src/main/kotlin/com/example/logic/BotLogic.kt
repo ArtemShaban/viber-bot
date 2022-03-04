@@ -22,7 +22,8 @@ fun updateState(state: BotLogicState, newInput: String): BotLogicState {
         state.userLang == null -> state.userLang = newInput
         state.userName == null -> state.userName = newInput
         state.stateFine == null -> state.stateFine = true//TODO
-        state.stressLevel == null -> state.stressLevel = newInput.toInt()
+        state.stressLevel == null -> state.stressLevel =
+            newInput.toInt() //todo need to validate, if not int - send a message.
         state.stressSource == null -> state.stressSource = newInput
         state.contactType == null -> state.contactType = newInput
     }
