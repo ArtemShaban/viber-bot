@@ -97,7 +97,8 @@ private fun newMessage(userRequest: UserRequest<*>, receiverId: String? = null):
                 Button(
                     actionType = if (url == null) "reply" else "open-url",
                     actionBody = url ?: it.key.name,
-                    text = it.value
+                    text = it.value,
+                    silent = url != null
                 )
             }
     } else {
