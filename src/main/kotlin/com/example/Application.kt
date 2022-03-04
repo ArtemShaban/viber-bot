@@ -69,7 +69,7 @@ fun handleClientMessage(event :ClientMessageEvent): String {
     var response = ""
     if (event.message.trackingData!= null) {
         val state = processState(klaxon.parse<BotLogicState>(StringReader(event.message.trackingData))!!, event.message.text!!)
-        response = newMessage(BotLogic(state).getNextUserRequest())
+        response = newMessage(BotLogic(state).getNextUserRequest(), event.sender.id)
     }
     return response
 }
@@ -80,7 +80,7 @@ fun handleConversationStarted(event: ConversationStartedEvent): String {
 }
 
 
-private fun newMessage(userRequest: UserRequest<*, *>): String {
+private fun newMessage(userRequest: UserRequest<*, *>, receiverId: String? = null): String {
     val buttons = if (userRequest.getOptions().isNotEmpty()) {
         userRequest.getOptions()
             .map { Button(actionType = "reply", actionBody = it.key.name, text = it.value) }
@@ -99,6 +99,7 @@ private fun newMessage(userRequest: UserRequest<*, *>): String {
     }
     val message: Any = if (keyboard != null) {
         WelcomeMessage(
+            receiver = receiverId,
             sender = Sender(Constants.senderName),
             type = "text",
             text = userRequest.getMessage(),
@@ -107,6 +108,7 @@ private fun newMessage(userRequest: UserRequest<*, *>): String {
         )
     } else {
         MessageWithoutKeyboard(
+            receiver = receiverId,
             sender = Sender(Constants.senderName),
             type = "text",
             text = userRequest.getMessage(),

@@ -6,6 +6,7 @@ import com.beust.klaxon.Klaxon
 private val klaxon = Klaxon()
 
 data class WelcomeMessage(
+    val receiver: String? = null,
     val sender: Sender,
 
     val type: String, //text, picture, video, file, location, contact, sticker, carousel content, url
@@ -25,6 +26,7 @@ data class WelcomeMessage(
     }
 }
 data class MessageWithoutKeyboard(
+    val receiver: String? = null,
     val sender: Sender,
 
     val type: String, //text, picture, video, file, location, contact, sticker, carousel content, url
