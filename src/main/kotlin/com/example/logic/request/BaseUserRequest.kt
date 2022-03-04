@@ -16,5 +16,5 @@ interface UserOption {
 }
 
 enum class Lang : UserOption {
-    UK, RU, EN
+    UA, RU, EN
 }

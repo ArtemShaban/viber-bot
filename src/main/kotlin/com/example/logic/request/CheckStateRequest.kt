@@ -6,7 +6,7 @@ class CheckStateRequest(state: BotLogicState) : UserRequest<CheckStateRequest.Op
 
     override fun getMessage(): String {
         return when (Lang.valueOf(state.userLang!!)) {
-            Lang.UK -> "Якщо ви зараз відчуваєте що у вас гострий стан і спілкування через бот ще 2-3 хвилини ви не витримаєте, натисніть кнопку \"${
+            Lang.UA -> "Якщо ви зараз відчуваєте що у вас гострий стан і спілкування через бот ще 2-3 хвилини ви не витримаєте, натисніть кнопку \"${
                 getOptionMessage(
                     Option.EMERGENCY
                 )
@@ -34,12 +34,12 @@ class CheckStateRequest(state: BotLogicState) : UserRequest<CheckStateRequest.Op
     private fun getOptionMessage(option: Option): String {
         return when (option) {
             Option.EMERGENCY -> when (Lang.valueOf(state.userLang!!)) {
-                Lang.UK -> "екстренна допомога"
+                Lang.UA -> "екстренна допомога"
                 Lang.RU -> "экстренная помощь"
                 Lang.EN -> "emergency help"
             }
             Option.FINE -> when (Lang.valueOf(state.userLang!!)) {
-                Lang.UK -> "я ок, тримаюся"
+                Lang.UA -> "я ок, тримаюся"
                 Lang.RU -> "я ок, держусь"
                 Lang.EN -> "I'm OK, I'm holding on button"
             }

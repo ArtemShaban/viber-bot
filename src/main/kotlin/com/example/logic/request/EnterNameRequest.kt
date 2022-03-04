@@ -6,7 +6,7 @@ class EnterNameRequest(state: BotLogicState) : UserRequest<EnterNameRequest.Opti
 
     override fun getMessage(): String {
         return when (Lang.valueOf(state.userLang!!)) {
-            Lang.UK -> "Як я можу до вас звертатись? \n" +
+            Lang.UA -> "Як я можу до вас звертатись? \n" +
                     "(Вкажи нижче своє імʼя або нік)\n"
             Lang.RU -> "Как я могу к вам обращаться? \n" +
                     "(напишите пожалуйста, ваше имя либо ник) "

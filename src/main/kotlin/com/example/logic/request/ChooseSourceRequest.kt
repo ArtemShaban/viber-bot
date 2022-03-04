@@ -6,7 +6,7 @@ class ChooseSourceRequest(state: BotLogicState) : UserRequest<ChooseSourceReques
 
     override fun getMessage(): String {
         return when (Lang.valueOf(state.userLang!!)) {
-            Lang.UK -> "Що вас зараз найбільше турбує, оберіть варіант:"
+            Lang.UA -> "Що вас зараз найбільше турбує, оберіть варіант:"
             Lang.RU -> "Что вас сейчас больше всего беспокоит, выберите вариант:"
             Lang.EN -> "What worries you the most, select an option:"
         }
@@ -20,22 +20,22 @@ class ChooseSourceRequest(state: BotLogicState) : UserRequest<ChooseSourceReques
     private fun getOptionMessage(option: Option): String {
         return when (option) {
             Option.PHYSICAL -> when (Lang.valueOf(state.userLang!!)) {
-                Lang.UK -> "фізичні / фізіологічні / тілесні складнощі"
+                Lang.UA -> "фізичні / фізіологічні / тілесні складнощі"
                 Lang.RU -> "физические / физиологические / телесные сложности"
                 Lang.EN -> "physical/physiological bodily difficulties"
             }
             Option.EMOTIONALLY -> when (Lang.valueOf(state.userLang!!)) {
-                Lang.UK -> "емоціно гострі переживання"
+                Lang.UA -> "емоціно гострі переживання"
                 Lang.RU -> "эмоционально острые переживания"
                 Lang.EN -> "emotionally intense experience"
             }
             Option.CERTAIN -> when (Lang.valueOf(state.userLang!!)) {
-                Lang.UK -> "порушення певних функцій в сприйнятті: галюцинації, шум в голові, звуки/дзвін в вухах …"
+                Lang.UA -> "порушення певних функцій в сприйнятті: галюцинації, шум в голові, звуки/дзвін в вухах …"
                 Lang.RU -> "нарушение определенных функций в восприятии: галлюцинации, шум в голове, звуки/звон в ушах …"
                 Lang.EN -> "impaired certain function in perception: hallucinations, noise in the head, sounds/ringing in the ears…"
             }
             Option.ANXIOUS -> when (Lang.valueOf(state.userLang!!)) {
-                Lang.UK -> "просто тривожно"
+                Lang.UA -> "просто тривожно"
                 Lang.RU -> "просто тревожно"
                 Lang.EN -> "Just anxious"
             }
