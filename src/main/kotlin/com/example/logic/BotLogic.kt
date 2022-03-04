@@ -12,10 +12,12 @@ class BotLogic(private val state: BotLogicState = BotLogicState()) {
             state.stressLevel == null -> RateLevelRequest(state)
             state.stressSource == null -> ChooseSourceRequest(state)
             state.contactType == null -> ContactTypeRequest(state)
+
+            state.phoneNumber != null -> FinishBotRequest(state)
             ContactTypeRequest.Option.getContactType(state) == ContactTypeRequest.Option.PHONE_CALL -> EnterPhoneRequest(
                 state
             )
-            state.phoneNumber != null -> FinishBotRequest(state)
+
             ContactTypeRequest.Option.getContactType(state) == ContactTypeRequest.Option.VIBER_CHAT
                     || ContactTypeRequest.Option.getContactType(state) == ContactTypeRequest.Option.ZOOM_MEETING -> FinishBotRequest(
                 state
