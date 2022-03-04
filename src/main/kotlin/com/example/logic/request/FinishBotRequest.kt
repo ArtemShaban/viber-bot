@@ -25,12 +25,12 @@ class FinishBotRequest(state: BotLogicState) : UserRequest<FinishBotRequest.Opti
             }
             ContactTypeRequest.ContactType.VIBER_CHAT -> when (Lang.valueOf(state.userLang!!)) {
                 Lang.UA -> "просимо перейти за посилання в Viber кімнату де є можливість поговорити з нашими спеціалістами"
-                Lang.RU -> "просим перейти за ссылку в Viber комнату, где есть возможность поговорить с нашими специалистами"
+                Lang.RU -> "просим перейти по ссылке в Viber комнату, где есть возможность поговорить с нашими специалистами"
                 Lang.EN -> "Please follow link to the Viber room where you can talk to our experts"
             }
             ContactTypeRequest.ContactType.ZOOM_MEETING -> when (Lang.valueOf(state.userLang!!)) {
                 Lang.UA -> "просимо перейти за посилання в Zoom кімнату де є можливість поговорити з нашими спеціалістами"
-                Lang.RU -> "просим перейти за ссылку в Zoom комнату, где есть возможность поговорить с нашими специалистами"
+                Lang.RU -> "просим перейти по ссылке в Zoom комнату, где есть возможность поговорить с нашими специалистами"
                 Lang.EN -> "Please follow link to the zoom room where you can talk to our experts"
             }
         }
