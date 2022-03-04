@@ -1,12 +1,16 @@
 package com.example.logic
 
 import com.example.email.EmailSender
+import com.example.logic.request.CheckStateRequest
 import com.example.logic.request.ChooseSourceRequest
 import com.example.logic.request.ContactTypeRequest
 
 class EmailLogic {
 
     fun sendEmail(state: BotLogicState) {
+        val userCondition = CheckStateRequest.Option.valueOf(state.state!!)
+        val userConditionAnswer = CheckStateRequest(state).getOptions()[userCondition]
+
         val stressSource = ChooseSourceRequest.Option.valueOf(state.stressSource!!)
         val stressSourceAnswer = ChooseSourceRequest(state).getOptions()[stressSource]
 
@@ -22,7 +26,7 @@ class EmailLogic {
                     
                     Анкета:
                     имя - ${state.userName}
-                    состояние - ${if (state.stateFine!!) "я ок, держусь" else "экстренная помощь"}
+                    состояние - $userConditionAnswer
                     уровень стресса - ${state.stressLevel}
                     источник стресса - $stressSourceAnswer 
                     тип связи - $contactTypeAnswer
