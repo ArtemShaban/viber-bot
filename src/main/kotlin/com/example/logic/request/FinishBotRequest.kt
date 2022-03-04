@@ -66,7 +66,17 @@ class FinishBotRequest(state: BotLogicState) : UserRequest<FinishBotRequest.Opti
             .sendEmail(
                 "my.psycholog.help@gmail.com",
                 "Запрос на психологическую помощь из viber чат бота",
-                "${state.userName} запросил помощь через чат-бот. Номер телефона: ${state.phoneNumber}"
+                """
+                    ${state.userName} запросил помощь через чат-бот. Номер телефона: ${state.phoneNumber}
+                    Анкета:
+                    имя - ${state.userName}
+                    состояние - ${if (state.stateFine!!) "я ок, держусь" else "экстренная помощь"}
+                    уровень стресса - ${state.stressLevel}
+                    источник стресса - ${state.stressSource}
+                    тип связи - ${state.contactType}
+                    номер телефона - ${state.phoneNumber}
+                    язык - ${state.userLang}    
+                    """
             )
     }
 }
