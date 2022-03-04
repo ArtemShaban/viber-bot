@@ -4,7 +4,6 @@ import com.example.logic.BotLogicState
 
 class FinishBotRequest(state: BotLogicState) : UserRequest<FinishBotRequest.Option>(state) {
     enum class Option : UserOption {
-        OK,
         VIBER {
             override fun getUrl(): String {
                 return "https://invite.viber.com/?g2=AQAGX5EYp8g%2Fx07ONU9p%2B12mDlPDHB1LVH2OUAzqjH81OLrAx54%2FLk4JEeELq5Jk"
@@ -39,7 +38,7 @@ class FinishBotRequest(state: BotLogicState) : UserRequest<FinishBotRequest.Opti
 
     override fun getOptions(): Map<Option, String> {
         return when (ContactTypeRequest.ContactType.get(state)) {
-            ContactTypeRequest.ContactType.PHONE_CALL -> mapOf(Pair(Option.OK, "OK"))
+            ContactTypeRequest.ContactType.PHONE_CALL -> emptyMap()
             ContactTypeRequest.ContactType.VIBER_CHAT -> when (Lang.valueOf(state.userLang!!)) {
                 Lang.UA -> mapOf(Pair(Option.VIBER, "перейти в Viber кімнату"))
                 Lang.RU -> mapOf(Pair(Option.VIBER, "перейти в Viber комнату"))
