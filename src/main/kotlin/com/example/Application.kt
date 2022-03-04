@@ -2,6 +2,7 @@ package com.example
 
 import com.beust.klaxon.Klaxon
 import com.example.api.model.*
+import com.example.api.sender.ViberApiSender
 import com.example.logic.BotLogic
 import com.example.logic.BotLogicState
 import com.example.logic.processState
@@ -21,6 +22,7 @@ private val klaxon = Klaxon()
 fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
 
 fun Application.module(testing: Boolean = false) {
+    val viberApiSender = ViberApiSender()
 
     routing {
         get("/") {
@@ -30,7 +32,7 @@ fun Application.module(testing: Boolean = false) {
             call.respondText("Viber bot for psychological help")
         }
         get("/register_webhook") {
-            val response = registerBotWebhook()
+            val response = viberApiSender.registerBotWebhook()
             val stringBody: String = response.receive()
             call.respondText(response.toString() + "\n" + stringBody)
         }
