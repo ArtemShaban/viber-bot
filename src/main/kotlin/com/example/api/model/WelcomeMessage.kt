@@ -14,7 +14,7 @@ data class WelcomeMessage(
     @Json(name = "tracking_data")
     val trackingData: String,
 
-    val keyboard: Keyboard? = null,
+    val keyboard: Keyboard,
     @Json(name = "min_api_version")
     val minApiVersion: Int = 4
 ) {
@@ -24,5 +24,16 @@ data class WelcomeMessage(
         public fun fromJson(json: String) = klaxon.parse<WelcomeMessage>(json)
     }
 }
+data class MessageWithoutKeyboard(
+    val sender: Sender,
 
+    val type: String, //text, picture, video, file, location, contact, sticker, carousel content, url
+    val text: String,
+
+    @Json(name = "tracking_data")
+    val trackingData: String,
+
+    @Json(name = "min_api_version")
+    val minApiVersion: Int = 4
+)
 

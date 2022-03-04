@@ -97,14 +97,23 @@ private fun newMessage(userRequest: UserRequest<*, *>): String {
     } else {
         null
     }
-    val message = WelcomeMessage(
-        sender = Sender(Constants.senderName),
-        type = "text",
-        text = userRequest.getMessage(),
-        trackingData = klaxon.toJsonString(userRequest.state),
-        keyboard = keyboard
-    )
-    return message.toJson()
+    val message: Any = if (keyboard != null) {
+        WelcomeMessage(
+            sender = Sender(Constants.senderName),
+            type = "text",
+            text = userRequest.getMessage(),
+            trackingData = klaxon.toJsonString(userRequest.state),
+            keyboard = keyboard
+        )
+    } else {
+        MessageWithoutKeyboard(
+            sender = Sender(Constants.senderName),
+            type = "text",
+            text = userRequest.getMessage(),
+            trackingData = klaxon.toJsonString(userRequest.state)
+        )
+    }
+    return klaxon.toJsonString(message)
 }
 
 class Constants {
