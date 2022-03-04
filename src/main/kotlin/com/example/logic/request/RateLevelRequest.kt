@@ -3,7 +3,7 @@ package com.example.logic.request
 import com.example.logic.BotLogicState
 
 class RateLevelRequest(state: BotLogicState) : UserRequest<RateLevelRequest.Option>(state) {
-    enum class Option
+    enum class Option : UserOption
 
     override fun getMessage(): String {
         return when (Lang.valueOf(state.userLang!!)) {

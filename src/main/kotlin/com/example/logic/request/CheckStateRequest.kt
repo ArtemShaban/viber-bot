@@ -46,7 +46,12 @@ class CheckStateRequest(state: BotLogicState) : UserRequest<CheckStateRequest.Op
         }
     }
 
-    enum class Option {
-        EMERGENCY, FINE
+    enum class Option : UserOption {
+        EMERGENCY {
+            override fun getUrl(): String {
+                return "https://invite.viber.com/?g2=AQAGX5EYp8g%2Fx07ONU9p%2B12mDlPDHB1LVH2OUAzqjH81OLrAx54%2FLk4JEeELq5Jk"
+            }
+        },
+        FINE
     }
 }

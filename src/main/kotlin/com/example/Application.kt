@@ -5,6 +5,7 @@ import com.example.api.model.*
 import com.example.api.sender.ViberApiSender
 import com.example.logic.BotLogic
 import com.example.logic.BotLogicState
+import com.example.logic.request.UserOption
 import com.example.logic.request.UserRequest
 import com.example.logic.updateState
 import io.ktor.application.*
@@ -94,7 +95,14 @@ suspend fun handleClientMessage(event: ClientMessageEvent, viberApiSender: Viber
 private fun newMessage(userRequest: UserRequest<*>, receiverId: String? = null): String {
     val buttons = if (userRequest.getOptions().isNotEmpty()) {
         userRequest.getOptions()
-            .map { Button(actionType = "reply", actionBody = it.key.name, text = it.value) }
+            .map {
+                val url = (it.key as? UserOption)?.getUrl()
+                Button(
+                    actionType = if (url == null) "reply" else "open-url",
+                    actionBody = url ?: it.key.name,
+                    text = it.value
+                )
+            }
     } else {
         null
     }

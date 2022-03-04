@@ -6,10 +6,15 @@ interface UserMessage {
     fun getMessage(): String
 }
 
-abstract class UserRequest<TOption : Enum<TOption>>(val state: BotLogicState) : UserMessage {
+abstract class UserRequest<TOption>(val state: BotLogicState) :
+    UserMessage where TOption : Enum<TOption>, TOption : UserOption {
     abstract fun getOptions(): Map<TOption, String>
 }
 
-enum class Lang {
+interface UserOption {
+    fun getUrl(): String? = null
+}
+
+enum class Lang : UserOption {
     UK, RU, EN
 }

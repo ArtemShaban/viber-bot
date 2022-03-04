@@ -18,5 +18,5 @@ class EnterNameRequest(state: BotLogicState) : UserRequest<EnterNameRequest.Opti
         return emptyMap()
     }
 
-    enum class Option : UserMessage
+    enum class Option : UserOption
 }

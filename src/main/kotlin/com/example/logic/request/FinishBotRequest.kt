@@ -3,8 +3,18 @@ package com.example.logic.request
 import com.example.logic.BotLogicState
 
 class FinishBotRequest(state: BotLogicState) : UserRequest<FinishBotRequest.Option>(state) {
-    enum class Option {
-        OK, VIBER, ZOOM
+    enum class Option : UserOption {
+        OK,
+        VIBER {
+            override fun getUrl(): String {
+                return "https://invite.viber.com/?g2=AQAGX5EYp8g%2Fx07ONU9p%2B12mDlPDHB1LVH2OUAzqjH81OLrAx54%2FLk4JEeELq5Jk"
+            }
+        },
+        ZOOM {
+            override fun getUrl(): String {
+                return "https://us02web.zoom.us/j/86374750332?pwd=R1FNWWdSRzhIV0V1QmRzOG9GbFlEQT09"
+            }
+        }
     }
 
     override fun getMessage(): String {

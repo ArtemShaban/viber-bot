@@ -42,7 +42,7 @@ class ChooseSourceRequest(state: BotLogicState) : UserRequest<ChooseSourceReques
         }
     }
 
-    enum class Option {
+    enum class Option : UserOption {
         PHYSICAL, EMOTIONALLY, CERTAIN, ANXIOUS
     }
 }

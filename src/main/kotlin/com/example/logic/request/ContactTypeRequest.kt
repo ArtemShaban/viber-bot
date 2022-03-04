@@ -36,7 +36,7 @@ class ContactTypeRequest(state: BotLogicState) : UserRequest<ContactTypeRequest.
         }
     }
 
-    enum class Option {
+    enum class Option : UserOption {
         VIBER_CHAT, PHONE_CALL, ZOOM_MEETING;
 
         companion object {
