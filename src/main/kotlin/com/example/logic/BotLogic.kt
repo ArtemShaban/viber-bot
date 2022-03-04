@@ -16,10 +16,7 @@ class BotLogic(private val state: BotLogicState = BotLogicState()) {
             state.contactType == null -> ContactTypeRequest(state)
 
             state.finished != null -> null
-            state.phoneNumber != null -> {
-                EmailLogic().sendEmail(state) //Send email if user asked help by phone call
-                FinishBotRequest(state)
-            }
+            state.phoneNumber != null -> FinishBotRequest(state)
 
             //ask for phone number
             ContactType.PHONE_CALL == ContactType.get(state) -> EnterPhoneRequest(state)
@@ -47,7 +44,10 @@ fun updateState(state: BotLogicState, newInput: String): BotLogicState {
         state.contactType == null -> state.contactType = newInput
         ContactType.get(state) == ContactType.PHONE_CALL && state.phoneNumber == null -> state.phoneNumber =
             newInput
-        state.finished == null -> state.finished = true
+        state.finished == null -> {
+            state.finished = true
+            EmailLogic().sendEmail(state) //Send email when user finished all bot steps.
+        }
     }
     return state
 }
@@ -61,5 +61,5 @@ data class BotLogicState(
     var stressSource: String? = null,
     var contactType: String? = null,
     var phoneNumber: String? = null,
-    var finished: Boolean? = null
+    var finished: Boolean? = null,
 )
