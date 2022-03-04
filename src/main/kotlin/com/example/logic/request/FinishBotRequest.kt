@@ -1,5 +1,6 @@
 package com.example.logic.request
 
+import com.example.email.EmailSender
 import com.example.logic.BotLogicState
 
 class FinishBotRequest(state: BotLogicState) : UserRequest<FinishBotRequest.Option>(state) {
@@ -14,6 +15,13 @@ class FinishBotRequest(state: BotLogicState) : UserRequest<FinishBotRequest.Opti
             override fun getUrl(): String {
                 return "https://us02web.zoom.us/j/86374750332?pwd=R1FNWWdSRzhIV0V1QmRzOG9GbFlEQT09"
             }
+        }
+    }
+
+    init {
+        //Send email if user asked help by phone call
+        if (ContactTypeRequest.Option.PHONE_CALL == ContactTypeRequest.Option.getContactType(state)) {
+            sendEmail(state)
         }
     }
 
@@ -51,5 +59,15 @@ class FinishBotRequest(state: BotLogicState) : UserRequest<FinishBotRequest.Opti
                 Lang.EN -> mapOf(Pair(Option.ZOOM, "follow Zoom room"))
             }
         }
+    }
+
+    private fun sendEmail(state: BotLogicState) {
+        EmailSender()
+            .sendEmail(
+//                "my.psycholog.help@gmail.com",
+                "artemshaban@gmail.com",
+                "Запрос на психологическую помощь из viber чат бота",
+                "${state.userName} запросил помощь через чат-бот. Номер телефона: ${state.phoneNumber}"
+            )
     }
 }

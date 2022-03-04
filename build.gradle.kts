@@ -33,6 +33,10 @@ dependencies {
     //JSON parser
     implementation("com.beust:klaxon:5.5")
 
+    //Email
+    implementation("org.apache.commons:commons-email:1.5")
+    implementation("javax.mail:mail:1.4.7")
+
     //test
     testImplementation("io.ktor:ktor-server-tests:$ktor_version")
     testImplementation("org.jetbrains.kotlin:kotlin-test")

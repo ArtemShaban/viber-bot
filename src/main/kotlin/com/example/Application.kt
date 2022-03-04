@@ -60,10 +60,7 @@ fun Application.module(testing: Boolean = false) {
                         TODO()
                     }
                 }
-                //todo handle all events
-                else -> {
-                    logger.warn { "Unhandled event: $event" }
-                }
+                else -> logger.warn { "Unhandled event: $event" }
             }
             logger.debug { "Sending response: $response" }
             call.respond(HttpStatusCode.OK, response)
