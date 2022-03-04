@@ -12,9 +12,19 @@ class BotLogic(private val state: BotLogicState = BotLogicState()) {
             state.stressLevel == null -> RateLevelRequest(state)
             state.stressSource == null -> ChooseSourceRequest(state)
             state.contactType == null -> ContactTypeRequest(state)
+            ContactTypeRequest.Option.getContactType(state) == ContactTypeRequest.Option.PHONE_CALL -> EnterPhoneRequest(
+                state
+            )
+            state.phoneNumber != null -> FinishBotRequest(state)
+            ContactTypeRequest.Option.getContactType(state) == ContactTypeRequest.Option.VIBER_CHAT
+                    || ContactTypeRequest.Option.getContactType(state) == ContactTypeRequest.Option.ZOOM_MEETING -> FinishBotRequest(
+                state
+            )
             else -> WelcomeRequest(state)
         }
     }
+
+
 }
 
 fun updateState(state: BotLogicState, newInput: String): BotLogicState {
@@ -26,6 +36,7 @@ fun updateState(state: BotLogicState, newInput: String): BotLogicState {
             newInput.toInt() //todo need to validate, if not int - send a message.
         state.stressSource == null -> state.stressSource = newInput
         state.contactType == null -> state.contactType = newInput
+        state.phoneNumber == null -> state.phoneNumber = newInput
     }
     return state
 }
@@ -36,5 +47,6 @@ data class BotLogicState(
     var stateFine: Boolean? = null,
     var stressLevel: Int? = null,
     var stressSource: String? = null,
-    var contactType: String? = null
+    var contactType: String? = null,
+    var phoneNumber: String? = null,
 )
