@@ -37,10 +37,6 @@ class EmailLogic {
     }
 
     private fun getTitle(state: BotLogicState): String {
-        if (!state.stateFine!!) {
-            return "[экстренная помощь] Пользователь запросил экстренную помощь"
-        }
-
         val contactType = ContactTypeRequest.ContactType.valueOf(state.contactType!!)
         return when (contactType) {
             ContactTypeRequest.ContactType.PHONE_CALL -> "[звонок] Запрос на психологическую помощь из viber чат бота"
