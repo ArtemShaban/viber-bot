@@ -47,9 +47,8 @@ fun updateState(state: BotLogicState, newInput: String): BotLogicState? {
         state.finished == null -> {
             state.finished = true
             EmailLogic().sendEmail(state) //Send email when user finished all bot steps.
+            if (FinishBotRequest.Option.RESTART.name == newInput) return null
         }
-
-        FinishBotRequest.Option.RESTART.name == newInput -> return null
     }
     return state
 }
