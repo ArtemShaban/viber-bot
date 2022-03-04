@@ -71,11 +71,12 @@ fun Application.module(testing: Boolean = false) {
 }
 
 fun handleConversationStarted(event: ConversationStartedEvent): String {
-    logger.debug { "Handle conversation started event: $event" }
+    logger.debug { "Handling conversation started event: $event" }
     return newMessage(BotLogic().getNextUserRequest())
 }
 
 suspend fun handleClientMessage(event: ClientMessageEvent, viberApiSender: ViberApiSender) {
+    logger.debug { "Handling client message event: $event" }
     if (event.message.trackingData != null) {
         val oldState = klaxon.parse<BotLogicState>(event.message.trackingData)!!
         val newState = updateState(oldState, newInput = event.message.text!!)
