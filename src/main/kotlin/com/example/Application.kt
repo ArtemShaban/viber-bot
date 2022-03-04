@@ -65,10 +65,11 @@ fun Application.module(testing: Boolean = false) {
     }
 }
 
-fun handleClientMessage(event :ClientMessageEvent): String {
+fun handleClientMessage(event: ClientMessageEvent): String {
     var response = ""
-    if (event.message.trackingData!= null) {
-        val state = processState(klaxon.parse<BotLogicState>(StringReader(event.message.trackingData))!!, event.message.text!!)
+    if (event.message.trackingData != null) {
+        val state =
+            processState(klaxon.parse<BotLogicState>(StringReader(event.message.trackingData))!!, event.message.text!!)
         response = newMessage(BotLogic(state).getNextUserRequest(), event.sender.id)
     }
     return response

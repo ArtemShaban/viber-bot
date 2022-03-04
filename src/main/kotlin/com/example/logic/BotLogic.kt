@@ -1,6 +1,9 @@
 package com.example.logic
 
-import com.example.logic.request.*
+import com.example.logic.request.CheckStateRequest
+import com.example.logic.request.EnterNameRequest
+import com.example.logic.request.UserRequest
+import com.example.logic.request.WelcomeRequest
 
 class BotLogic(private val state: BotLogicState = BotLogicState()) {
 

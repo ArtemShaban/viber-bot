@@ -25,6 +25,7 @@ data class WelcomeMessage(
         public fun fromJson(json: String) = klaxon.parse<WelcomeMessage>(json)
     }
 }
+
 data class MessageWithoutKeyboard(
     val receiver: String? = null,
     val sender: Sender,

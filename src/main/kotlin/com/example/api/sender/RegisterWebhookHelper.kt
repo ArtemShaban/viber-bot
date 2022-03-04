@@ -1,5 +1,7 @@
 package com.example
 
+import com.example.api.sender.getAutHeaderName
+import com.example.api.sender.getAuthToken
 import io.ktor.client.*
 import io.ktor.client.engine.cio.*
 import io.ktor.client.request.*

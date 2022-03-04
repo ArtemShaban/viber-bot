@@ -1,4 +1,4 @@
-package com.example
+package com.example.api.sender
 
 fun getAutHeaderName(): String {
     return "X-Viber-Auth-Token"
