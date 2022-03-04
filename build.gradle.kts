@@ -35,7 +35,7 @@ dependencies {
 
     //Email
     implementation("org.apache.commons:commons-email:1.5")
-    implementation("javax.mail:mail:1.4.7")
+    implementation("com.sun.mail:javax.mail:1.6.2")
 
     //test
     testImplementation("io.ktor:ktor-server-tests:$ktor_version")
