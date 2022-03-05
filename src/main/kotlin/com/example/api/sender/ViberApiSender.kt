@@ -26,7 +26,7 @@ class ViberApiSender {
             }
             body = """
             {
-               "url":"https://viber-bot-ua.herokuapp.com/webhook",
+               "url":"https://viber-bot-ua-help.herokuapp.com/webhook",
                "send_name": true,
                "send_photo": true
             }
