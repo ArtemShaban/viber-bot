@@ -32,6 +32,10 @@ fun Application.module(testing: Boolean = false) {
         get("/about") {
             call.respondText("Viber bot for psychological help")
         }
+        get("/bot") {
+            val resource = this::class.java.classLoader.getResource("bot.html")!!.readText(Charsets.UTF_8)
+            call.respondText(resource, ContentType.Text.Html)
+        }
         get("/register_webhook") {
             val response = viberApiSender.registerBotWebhook()
             val stringBody: String = response.receive()
