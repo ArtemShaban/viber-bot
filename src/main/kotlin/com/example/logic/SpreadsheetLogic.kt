@@ -24,6 +24,7 @@ class SpreadsheetLogic {
 
         spreadsheetSender.append(listOf(
             /*date*/             date,
+            /*Viber user id*/  (state.userMessengerInfo?.id ?: ""),
             /*Viber username*/  (state.userMessengerInfo?.name ?: ""),
             /*Viber avatar*/    (state.userMessengerInfo?.avatar ?: ""),
             /*Viber country*/   (state.userMessengerInfo?.country ?: ""),
