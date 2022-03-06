@@ -37,6 +37,11 @@ dependencies {
     implementation("org.apache.commons:commons-email:1.5")
     implementation("com.sun.mail:javax.mail:1.6.2")
 
+    //Google Sheets
+    implementation("com.google.api-client:google-api-client:1.33.0")
+    implementation("com.google.oauth-client:google-oauth-client-jetty:1.32.1")
+    implementation("com.google.apis:google-api-services-sheets:v4-rev20210629-1.32.1")
+
     //test
     testImplementation("io.ktor:ktor-server-tests:$ktor_version")
     testImplementation("org.jetbrains.kotlin:kotlin-test")
