@@ -23,31 +23,19 @@ class SpreadsheetLogic {
         val date = LocalDateTime.now().format(DateTimeFormatter.ofPattern("d/M/y H:m:ss"))
 
         spreadsheetSender.append(listOf(
-            /*date*/
-            date,
-            /*Viber username*/
-            (state.userMessengerInfo?.name ?: ""),
-            /*entered name*/
-            state.userName.orEmpty(),
-            /*condition*/
-            userConditionAnswer.orEmpty(),
-            /*stress level*/
-            state.stressLevel?.toString() ?: "",
-            /*stress source*/
-            stressSourceAnswer.orEmpty(),
-            /*contact type*/
-            contactTypeAnswer.orEmpty(),
-            /*phone number*/
-            state.phoneNumber.orEmpty(),
-            /*chosen lang*/
-            state.userLang.orEmpty(),
+            /*date*/             date,
+            /*Viber username*/  (state.userMessengerInfo?.name ?: ""),
+            /*entered name*/    state.userName.orEmpty(),
+            /*condition*/       userConditionAnswer.orEmpty(),
+            /*stress level*/    state.stressLevel?.toString() ?: "",
+            /*stress source*/   stressSourceAnswer.orEmpty(),
+            /*contact type*/    contactTypeAnswer.orEmpty(),
+            /*phone number*/    state.phoneNumber.orEmpty(),
+            /*chosen lang*/     state.userLang.orEmpty(),
 
-            /*Viber user id*/
-            (state.userMessengerInfo?.id ?: ""),
-            /*Viber avatar*/
-            (state.userMessengerInfo?.avatar ?: ""),
-            /*Viber country*/
-            (state.userMessengerInfo?.country ?: ""),
+            /*Viber user id*/   (state.userMessengerInfo?.id ?: ""),
+            /*Viber avatar*/    (state.userMessengerInfo?.avatar ?: ""),
+            /*Viber country*/   (state.userMessengerInfo?.country ?: "")
         ))
     }
 
