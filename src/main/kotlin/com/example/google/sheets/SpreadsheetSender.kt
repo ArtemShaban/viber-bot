@@ -12,14 +12,16 @@ class SpreadsheetSender {
     private val applicationName = "Google Sheets API Java Quickstart"
     private val jsonFactory: JsonFactory = GsonFactory.getDefaultInstance()
     private val httpTransport = GoogleNetHttpTransport.newTrustedTransport()
-    private val spreadsheetId =
-        "1aC6flxcfGVBR9A0f2X5GRK0MfSjYfU7qr15cup_WY5Y" //https://docs.google.com/spreadsheets/d/1aC6flxcfGVBR9A0f2X5GRK0MfSjYfU7qr15cup_WY5Y/edit#gid=0
+
+    //https://docs.google.com/spreadsheets/d/1aC6flxcfGVBR9A0f2X5GRK0MfSjYfU7qr15cup_WY5Y/edit#gid=0
+    private val spreadsheetId = "1aC6flxcfGVBR9A0f2X5GRK0MfSjYfU7qr15cup_WY5Y"
 
     private var credentials: Credential = GoogleCredentialProvider().getCredentialsFromServiceAccount()
     private val service = Sheets.Builder(httpTransport, jsonFactory, credentials)
         .setApplicationName(applicationName)
         .build()
 
+    //todo use coroutines to not block thread
     fun append(values: List<String>) {
         val range = "A1"
         val valueRange = ValueRange()

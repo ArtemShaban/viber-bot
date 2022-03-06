@@ -88,7 +88,7 @@ suspend fun handleClientMessage(event: ClientMessageEvent, viberApiSender: Viber
     val state: BotLogicState? =
         if (event.message.trackingData != null) {
             val oldState = klaxon.parse<BotLogicState>(event.message.trackingData)!!
-            updateState(oldState, newInput = event.message.text!!)
+            updateState(oldState, newInput = event.message.text!!, event.sender)
         } else {
             null
         }

@@ -6,7 +6,7 @@ data class ClientMessageEvent(
     val event: String,
     val timestamp: Long,
     val message: EventMessage,
-    val sender: Sender
+    val sender: User,
 )
 
 data class EventMessage(

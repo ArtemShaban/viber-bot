@@ -1,9 +1,12 @@
 package com.example.logic
 
+import com.example.api.model.User
 import com.example.logic.request.*
 import com.example.logic.request.ContactTypeRequest.ContactType
 
 class BotLogic(private val state: BotLogicState = BotLogicState()) {
+    private val emailLogic = EmailLogic()
+    private val spreadsheetLogic = SpreadsheetLogic()
 
     fun getNextUserRequest(): UserRequest<*>? {
         return when {
@@ -31,12 +34,15 @@ class BotLogic(private val state: BotLogicState = BotLogicState()) {
     }
 
     private fun handleFinishedState(state: BotLogicState): FinishBotRequest {
-        EmailLogic().sendEmail(state) //Send email when user finished all bot steps.
+        emailLogic.sendEmail(state) //Send email when user finished all bot steps.
+        spreadsheetLogic.addUserDataToSpreadsheet(state)
         return FinishBotRequest(state)
     }
 }
 
-fun updateState(state: BotLogicState, newInput: String): BotLogicState? {
+fun updateState(state: BotLogicState, newInput: String, user: User): BotLogicState? {
+    state.userMessengerInfo = user
+
     when {
         state.userLang == null -> state.userLang = newInput
         state.userName == null -> state.userName = newInput
@@ -68,4 +74,6 @@ data class BotLogicState(
     var contactType: String? = null,
     var phoneNumber: String? = null,
     var finished: Boolean? = null,
+
+    var userMessengerInfo: User? = null,
 )
