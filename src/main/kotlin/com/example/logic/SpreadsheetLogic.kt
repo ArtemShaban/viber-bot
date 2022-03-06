@@ -35,7 +35,7 @@ class SpreadsheetLogic {
             /*stress source*/   stressSourceAnswer.orEmpty(),
             /*contact type*/    contactTypeAnswer.orEmpty(),
             /*phone number*/    state.phoneNumber.orEmpty(),
-            /*choosen lang*/    state.userLang.orEmpty()
+            /*chosen lang*/    state.userLang.orEmpty()
         ))
     }
 
