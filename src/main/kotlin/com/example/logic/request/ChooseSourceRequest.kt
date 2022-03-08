@@ -16,7 +16,6 @@ class ChooseSourceRequest(state: BotLogicState) : UserRequest<ChooseSourceReques
         return Option.values().associate { Pair(it, getOptionMessage(it)) }
     }
 
-
     private fun getOptionMessage(option: Option): String {
         return when (option) {
             Option.PHYSICAL -> when (Lang.valueOf(state.userLang!!)) {

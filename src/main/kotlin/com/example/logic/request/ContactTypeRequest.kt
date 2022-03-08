@@ -13,7 +13,7 @@ class ContactTypeRequest(state: BotLogicState) : UserRequest<ContactTypeRequest.
     }
 
     override fun getOptions(): Map<ContactType, String> {
-        return ContactType.values().associate { Pair(it, getOptionMessage(it)) }
+        return ContactType.values().associateWith { getOptionMessage(it) }
     }
 
     private fun getOptionMessage(contactType: ContactType): String {

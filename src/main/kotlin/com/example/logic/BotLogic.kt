@@ -13,7 +13,8 @@ class BotLogic(private val state: BotLogicState = BotLogicState()) {
             state.userLang == null -> WelcomeRequest(state)
             state.userName == null -> EnterNameRequest(state)
             state.state == null -> CheckStateRequest(state)
-            state.stateFine == null -> null
+            state.stateNeedEmergencyHelp == true -> EmergencyHelpBotRequest(state)
+
             state.stressLevel == null -> StressLevelRequest(state)
             state.stressSource == null -> ChooseSourceRequest(state)
             state.contactType == null -> ContactTypeRequest(state)
@@ -45,12 +46,16 @@ fun updateState(state: BotLogicState, newInput: String, user: User): BotLogicSta
     when {
         state.userLang == null -> state.userLang = newInput
         state.userName == null -> state.userName = newInput
-        state.stateFine == null -> {
+        state.state == null -> {
             state.state = newInput
-            state.stateFine = if (CheckStateRequest.Option.FINE.name == state.state) true else null
+            state.stateNeedEmergencyHelp = CheckStateRequest.Option.EMERGENCY.name == state.state
         }
-        state.stressLevel == null -> state.stressLevel =
-            newInput.toInt() //todo need to validate, if not int - send a message.
+        state.stateNeedEmergencyHelp == true -> {
+            if (EmergencyHelpBotRequest.Option.RESTART.name == newInput) return null
+        }
+
+        //todo need to validate stress level, if not int - send a message.
+        state.stressLevel == null -> state.stressLevel = newInput.toInt()
         state.stressSource == null -> state.stressSource = newInput
         state.contactType == null -> state.contactType = newInput
         //remember phone number for PHONE_CALL and PHONE_CALL contact type
@@ -70,7 +75,7 @@ data class BotLogicState(
     var userLang: String? = null,
     var userName: String? = null,
     var state: String? = null,
-    var stateFine: Boolean? = null,
+    var stateNeedEmergencyHelp: Boolean? = null,
     var stressLevel: Int? = null,
     var stressSource: String? = null,
     var contactType: String? = null,
