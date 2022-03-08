@@ -14,7 +14,7 @@ class BotLogic(private val state: BotLogicState = BotLogicState()) {
             state.userName == null -> EnterNameRequest(state)
             state.state == null -> CheckStateRequest(state)
             state.stateFine == null -> null
-            state.stressLevel == null -> RateLevelRequest(state)
+            state.stressLevel == null -> StressLevelRequest(state)
             state.stressSource == null -> ChooseSourceRequest(state)
             state.contactType == null -> ContactTypeRequest(state)
 

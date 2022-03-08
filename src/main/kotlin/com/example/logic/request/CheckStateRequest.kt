@@ -6,21 +6,9 @@ class CheckStateRequest(state: BotLogicState) : UserRequest<CheckStateRequest.Op
 
     override fun getMessage(): String {
         return when (Lang.valueOf(state.userLang!!)) {
-            Lang.UA -> "Якщо ви зараз відчуваєте що у вас гострий стан і спілкування через бот ще 2-3 хвилини ви не витримаєте, натисніть кнопку \"${
-                getOptionMessage(
-                    Option.EMERGENCY
-                )
-            }\" або \"${getOptionMessage(Option.FINE)}\""
-            Lang.RU -> "Если вы сейчас чувствуете, что у вас острое состояние и общение через бот еще 2-3 минуты вы не выдержите, нажмите кнопку \"${
-                getOptionMessage(
-                    Option.EMERGENCY
-                )
-            }\" или \"${getOptionMessage(Option.FINE)}\""
-            Lang.EN -> "If you feel like you have an acute condition and you can't stand communication though the bot for another 2-3 minutes, click the \"${
-                getOptionMessage(
-                    Option.EMERGENCY
-                )
-            }\" or \"${getOptionMessage(Option.FINE)}\""
+            Lang.UA -> "Будь ласка, виберіть тип допомоги: екстрена допомога або можу продовжити"
+            Lang.RU -> "Пожалуйста, выберите тип помощи : экстренная помощь либо могу продолжить"
+            Lang.EN -> "Please select the type of assistance: emergency help  or I can continue"
         }
     }
 

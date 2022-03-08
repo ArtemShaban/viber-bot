@@ -6,8 +6,8 @@ class ChooseSourceRequest(state: BotLogicState) : UserRequest<ChooseSourceReques
 
     override fun getMessage(): String {
         return when (Lang.valueOf(state.userLang!!)) {
-            Lang.UA -> "Що вас зараз найбільше турбує, оберіть варіант:"
-            Lang.RU -> "Что вас сейчас больше всего беспокоит, выберите вариант:"
+            Lang.UA -> "Що вас турбує, оберіть один варіант відповідно до стану зараз:"
+            Lang.RU -> "Что вас беспокоит, выберите один вариант по состоянию на сейчас:"
             Lang.EN -> "What worries you the most, select an option:"
         }
     }
@@ -20,24 +20,24 @@ class ChooseSourceRequest(state: BotLogicState) : UserRequest<ChooseSourceReques
     private fun getOptionMessage(option: Option): String {
         return when (option) {
             Option.PHYSICAL -> when (Lang.valueOf(state.userLang!!)) {
-                Lang.UA -> "фізичні / фізіологічні / тілесні складнощі"
-                Lang.RU -> "физические / физиологические / телесные сложности"
-                Lang.EN -> "physical/physiological bodily difficulties"
+                Lang.UA -> "фізичні, тілесні симптоми/нездужання"
+                Lang.RU -> "физические, телесные симптомы/недомогания"
+                Lang.EN -> "physical, bodily symptoms/diseases"
             }
             Option.EMOTIONALLY -> when (Lang.valueOf(state.userLang!!)) {
-                Lang.UA -> "емоціно гострі переживання"
-                Lang.RU -> "эмоционально острые переживания"
-                Lang.EN -> "emotionally intense experience"
+                Lang.UA -> "емоційні переживання"
+                Lang.RU -> "эмоциональные переживания "
+                Lang.EN -> "emotional experiences"
             }
             Option.CERTAIN -> when (Lang.valueOf(state.userLang!!)) {
-                Lang.UA -> "порушення певних функцій в сприйнятті: галюцинації, шум в голові, звуки/дзвін в вухах …"
-                Lang.RU -> "нарушение определенных функций в восприятии: галлюцинации, шум в голове, звуки/звон в ушах …"
-                Lang.EN -> "impaired certain function in perception: hallucinations, noise in the head, sounds/ringing in the ears…"
+                Lang.UA -> "всі разом"
+                Lang.RU -> "всё вместе"
+                Lang.EN -> "together"
             }
             Option.ANXIOUS -> when (Lang.valueOf(state.userLang!!)) {
                 Lang.UA -> "просто тривожно"
                 Lang.RU -> "просто тревожно"
-                Lang.EN -> "Just anxious"
+                Lang.EN -> "just anxious"
             }
         }
     }
