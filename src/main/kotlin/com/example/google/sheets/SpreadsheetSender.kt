@@ -23,7 +23,7 @@ class SpreadsheetSender {
 
     //todo use coroutines to not block thread
     fun append(values: List<String>) {
-        val range = "A1"
+        val range = "B2"
         val valueRange = ValueRange()
             .setValues(listOf(values))
         service
