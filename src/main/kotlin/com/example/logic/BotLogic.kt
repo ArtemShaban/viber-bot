@@ -42,7 +42,6 @@ class BotLogic(private val state: BotLogicState = BotLogicState()) {
 fun updateState(state: BotLogicState, newInput: String, user: User): BotLogicState? {
     state.userMessengerInfo = user
 
-    val contactType = ContactType.get(state)
     when {
         state.userLang == null -> state.userLang = newInput
         state.userName == null -> state.userName = newInput
@@ -55,7 +54,8 @@ fun updateState(state: BotLogicState, newInput: String, user: User): BotLogicSta
         state.stressSource == null -> state.stressSource = newInput
         state.contactType == null -> state.contactType = newInput
         //remember phone number for PHONE_CALL and PHONE_CALL contact type
-        state.phoneNumber == null && (ContactType.PHONE_CALL == contactType || ContactType.VIBER_CHAT == contactType)
+        state.phoneNumber == null && (ContactType.PHONE_CALL == ContactType.get(state) || ContactType.VIBER_CHAT == ContactType.get(
+            state))
         -> state.phoneNumber = newInput
 
         state.finished == null -> {
