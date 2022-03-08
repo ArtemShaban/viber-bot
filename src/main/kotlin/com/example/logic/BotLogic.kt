@@ -21,13 +21,12 @@ class BotLogic(private val state: BotLogicState = BotLogicState()) {
             state.finished != null -> null
             state.phoneNumber != null -> handleFinishedState(state)
 
-            //ask for phone number
-            ContactType.PHONE_CALL == ContactType.get(state) -> EnterPhoneRequest(state)
+            //ask for phone number if case of PHONE_CALL and VIBER_CHAT contact types.
+            ContactType.PHONE_CALL == ContactType.get(state) || ContactType.VIBER_CHAT == ContactType.get(state)
+            -> EnterPhoneRequest(state)
 
-            //show finish page for Viber and Zoom contact types
-            ContactType.VIBER_CHAT == ContactType.get(state) || ContactType.ZOOM_MEETING == ContactType.get(
-                state
-            ) -> handleFinishedState(state)
+            //show finish page for  Zoom contact types
+            ContactType.ZOOM_MEETING == ContactType.get(state) -> handleFinishedState(state)
 
             else -> WelcomeRequest(state)
         }
