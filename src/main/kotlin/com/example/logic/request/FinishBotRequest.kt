@@ -39,11 +39,6 @@ class FinishBotRequest(state: BotLogicState) : UserRequest<FinishBotRequest.Opti
 
     override fun getOptions(): Map<Option, String> {
         val option = when (ContactTypeRequest.ContactType.get(state)) {
-            ContactTypeRequest.ContactType.VIBER_CHAT -> when (Lang.valueOf(state.userLang!!)) {
-                Lang.UA -> Pair(Option.VIBER, "перейти в Viber кімнату")
-                Lang.RU -> Pair(Option.VIBER, "перейти в Viber комнату")
-                Lang.EN -> Pair(Option.VIBER, "follow Viber room")
-            }
             ContactTypeRequest.ContactType.ZOOM_MEETING -> when (Lang.valueOf(state.userLang!!)) {
                 Lang.UA -> Pair(Option.ZOOM, "перейти в Zoom кімнату")
                 Lang.RU -> Pair(Option.ZOOM, "перейти в Zoom комнату")
