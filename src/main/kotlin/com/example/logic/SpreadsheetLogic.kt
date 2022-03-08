@@ -23,6 +23,7 @@ class SpreadsheetLogic {
         val date = LocalDateTime.now().format(DateTimeFormatter.ofPattern("d/M/y H:m:ss"))
 
         spreadsheetSender.append(listOf(
+            /*status*/          "Новый",
             /*date*/             date,
             /*Viber username*/  (state.userMessengerInfo?.name ?: ""),
             /*entered name*/    state.userName.orEmpty(),
