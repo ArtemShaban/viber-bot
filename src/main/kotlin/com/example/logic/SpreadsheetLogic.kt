@@ -11,7 +11,7 @@ class SpreadsheetLogic {
     private val spreadsheetSender = SpreadsheetSender()
 
     fun addUserDataToSpreadsheet(state: BotLogicState) {
-        val userCondition = CheckStateRequest.Option.valueOf(state.state!!)
+        val userCondition = CheckStateRequest.UserState.valueOf(state.state!!)
         val userConditionAnswer = CheckStateRequest(state).getOptions()[userCondition]
 
         val stressSource = state.stressSource?.let { ChooseSourceRequest.Option.valueOf(it) }

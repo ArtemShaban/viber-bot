@@ -2,7 +2,7 @@ package com.example.logic.request
 
 import com.example.logic.BotLogicState
 
-class CheckStateRequest(state: BotLogicState) : UserRequest<CheckStateRequest.Option>(state) {
+class CheckStateRequest(state: BotLogicState) : UserRequest<CheckStateRequest.UserState>(state) {
 
     override fun getMessage(): String {
         return when (Lang.valueOf(state.userLang!!)) {
@@ -12,21 +12,21 @@ class CheckStateRequest(state: BotLogicState) : UserRequest<CheckStateRequest.Op
         }
     }
 
-    override fun getOptions(): Map<Option, String> {
+    override fun getOptions(): Map<UserState, String> {
         return mapOf(
-            Pair(Option.EMERGENCY, getOptionMessage(Option.EMERGENCY)),
-            Pair(Option.FINE, getOptionMessage(Option.FINE))
+            Pair(UserState.EMERGENCY, getOptionMessage(UserState.EMERGENCY)),
+            Pair(UserState.FINE, getOptionMessage(UserState.FINE))
         )
     }
 
-    private fun getOptionMessage(option: Option): String {
-        return when (option) {
-            Option.EMERGENCY -> when (Lang.valueOf(state.userLang!!)) {
+    private fun getOptionMessage(userState: UserState): String {
+        return when (userState) {
+            UserState.EMERGENCY -> when (Lang.valueOf(state.userLang!!)) {
                 Lang.UA -> "екстренна допомога"
                 Lang.RU -> "экстренная помощь"
                 Lang.EN -> "emergency help"
             }
-            Option.FINE -> when (Lang.valueOf(state.userLang!!)) {
+            UserState.FINE -> when (Lang.valueOf(state.userLang!!)) {
                 Lang.UA -> "я ок, тримаюся"
                 Lang.RU -> "я ок, держусь"
                 Lang.EN -> "I'm OK, I'm holding on button"
@@ -34,8 +34,13 @@ class CheckStateRequest(state: BotLogicState) : UserRequest<CheckStateRequest.Op
         }
     }
 
-    enum class Option : UserOption {
+    enum class UserState : UserOption {
         EMERGENCY,
-        FINE
+        FINE;
+
+        companion object {
+            fun get(state: BotLogicState): UserState =
+                valueOf(state.contactType!!)
+        }
     }
 }

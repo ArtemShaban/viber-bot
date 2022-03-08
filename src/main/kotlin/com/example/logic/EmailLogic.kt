@@ -9,7 +9,7 @@ class EmailLogic {
     private val emailSender = EmailSender()
 
     fun sendEmail(state: BotLogicState) {
-        val userCondition = CheckStateRequest.Option.valueOf(state.state!!)
+        val userCondition = CheckStateRequest.UserState.valueOf(state.state!!)
         val userConditionAnswer = CheckStateRequest(state).getOptions()[userCondition]
 
         val stressSource = state.stressSource?.let { ChooseSourceRequest.Option.valueOf(it) }

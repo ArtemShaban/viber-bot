@@ -2,6 +2,7 @@ package com.example.logic
 
 import com.example.api.model.User
 import com.example.logic.request.*
+import com.example.logic.request.CheckStateRequest.UserState
 import com.example.logic.request.ContactTypeRequest.ContactType
 
 class BotLogic(private val state: BotLogicState = BotLogicState()) {
@@ -13,7 +14,8 @@ class BotLogic(private val state: BotLogicState = BotLogicState()) {
             state.userLang == null -> WelcomeRequest(state)
             state.userName == null -> EnterNameRequest(state)
             state.state == null -> CheckStateRequest(state)
-            state.stateNeedEmergencyHelp == true -> EmergencyHelpBotRequest(state)
+            UserState.EMERGENCY == UserState.get(state) -> EmergencyHelpBotRequest(state)
+            state.emergencyHelp != null -> null
 
             state.stressLevel == null -> StressLevelRequest(state)
             state.stressSource == null -> ChooseSourceRequest(state)
@@ -26,7 +28,7 @@ class BotLogic(private val state: BotLogicState = BotLogicState()) {
             ContactType.PHONE_CALL == ContactType.get(state) || ContactType.VIBER_CHAT == ContactType.get(state)
             -> EnterPhoneRequest(state)
 
-            //show finish page for  Zoom contact types
+            //show finish page for Zoom contact types
             ContactType.ZOOM_MEETING == ContactType.get(state) -> handleFinishedState(state)
 
             else -> WelcomeRequest(state)
@@ -46,11 +48,9 @@ fun updateState(state: BotLogicState, newInput: String, user: User): BotLogicSta
     when {
         state.userLang == null -> state.userLang = newInput
         state.userName == null -> state.userName = newInput
-        state.state == null -> {
-            state.state = newInput
-            state.stateNeedEmergencyHelp = CheckStateRequest.Option.EMERGENCY.name == state.state
-        }
-        state.stateNeedEmergencyHelp == true -> {
+        state.state == null -> state.state = newInput
+        state.emergencyHelp == null -> {
+            state.emergencyHelp = true
             if (EmergencyHelpBotRequest.Option.RESTART.name == newInput) return null
         }
 
@@ -75,7 +75,7 @@ data class BotLogicState(
     var userLang: String? = null,
     var userName: String? = null,
     var state: String? = null,
-    var stateNeedEmergencyHelp: Boolean? = null,
+    var emergencyHelp: Boolean? = null,
     var stressLevel: Int? = null,
     var stressSource: String? = null,
     var contactType: String? = null,
