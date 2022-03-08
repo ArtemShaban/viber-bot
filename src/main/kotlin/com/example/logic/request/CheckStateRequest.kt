@@ -14,8 +14,8 @@ class CheckStateRequest(state: BotLogicState) : UserRequest<CheckStateRequest.Us
 
     override fun getOptions(): Map<UserState, String> {
         return mapOf(
-            Pair(UserState.EMERGENCY, getOptionMessage(UserState.EMERGENCY)),
-            Pair(UserState.FINE, getOptionMessage(UserState.FINE))
+            Pair(UserState.FINE, getOptionMessage(UserState.FINE)),
+            Pair(UserState.EMERGENCY, getOptionMessage(UserState.EMERGENCY))
         )
     }
 
