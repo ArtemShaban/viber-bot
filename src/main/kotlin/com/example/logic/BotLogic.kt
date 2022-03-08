@@ -14,8 +14,8 @@ class BotLogic(private val state: BotLogicState = BotLogicState()) {
             state.userLang == null -> WelcomeRequest(state)
             state.userName == null -> EnterNameRequest(state)
             state.state == null -> CheckStateRequest(state)
+            state.emergencyHelpShown != null -> null
             UserState.EMERGENCY == UserState.get(state) -> EmergencyHelpBotRequest(state)
-            state.emergencyHelp != null -> null
 
             state.stressLevel == null -> StressLevelRequest(state)
             state.stressSource == null -> ChooseSourceRequest(state)
@@ -49,8 +49,8 @@ fun updateState(state: BotLogicState, newInput: String, user: User): BotLogicSta
         state.userLang == null -> state.userLang = newInput
         state.userName == null -> state.userName = newInput
         state.state == null -> state.state = newInput
-        state.emergencyHelp == null -> {
-            state.emergencyHelp = true
+        UserState.EMERGENCY == UserState.get(state) -> {
+            state.emergencyHelpShown = true
             if (EmergencyHelpBotRequest.Option.RESTART.name == newInput) return null
         }
 
@@ -75,7 +75,7 @@ data class BotLogicState(
     var userLang: String? = null,
     var userName: String? = null,
     var state: String? = null,
-    var emergencyHelp: Boolean? = null,
+    var emergencyHelpShown: Boolean? = null,
     var stressLevel: Int? = null,
     var stressSource: String? = null,
     var contactType: String? = null,
