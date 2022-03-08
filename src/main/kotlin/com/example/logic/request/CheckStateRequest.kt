@@ -40,7 +40,7 @@ class CheckStateRequest(state: BotLogicState) : UserRequest<CheckStateRequest.Us
 
         companion object {
             fun get(state: BotLogicState): UserState =
-                valueOf(state.contactType!!)
+                valueOf(state.state!!)
         }
     }
 }
