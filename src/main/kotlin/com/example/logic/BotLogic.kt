@@ -34,7 +34,7 @@ class BotLogic(private val state: BotLogicState = BotLogicState()) {
     }
 
     private fun handleFinishedState(state: BotLogicState): FinishBotRequest {
-        emailLogic.sendEmail(state) //Send email when user finished all bot steps.
+//        emailLogic.sendEmail(state) //Send email when user finished all bot steps.
         spreadsheetLogic.addUserDataToSpreadsheet(state)
         return FinishBotRequest(state)
     }
