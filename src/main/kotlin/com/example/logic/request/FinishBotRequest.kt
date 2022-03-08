@@ -25,9 +25,9 @@ class FinishBotRequest(state: BotLogicState) : UserRequest<FinishBotRequest.Opti
                 Lang.EN -> "We'll give your number to the psychologist, who will contact you in the near future by Viber"
             }
             ContactTypeRequest.ContactType.ZOOM_MEETING -> when (Lang.valueOf(state.userLang!!)) {
-                Lang.UA -> "Просимо перейти за посилання в Zoom кімнату де є можливість поговорити з нашими спеціалістами"
-                Lang.RU -> "Просим перейти по ссылке в Zoom комнату, где есть возможность поговорить с нашими специалистами"
-                Lang.EN -> "Please follow link to the zoom room where you can talk to our experts"
+                Lang.UA -> "Просимо перейти до Zoom кімнати, де наш координатор направить вас до чергового психолога."
+                Lang.RU -> "Просим перейти в Zoom комнату, где наш координатор направит вас к дежурному психологу."
+                Lang.EN -> "Please follow Zoom room, where our coordinator will direct you to the psychologist on duty."
             }
         }
     }
