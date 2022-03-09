@@ -24,7 +24,7 @@ class ContactTypeRequest(state: BotLogicState) : UserRequest<ContactTypeRequest.
                 Lang.EN -> "Viber chat in text format"
             }
             ContactType.PHONE_CALL -> when (Lang.valueOf(state.userLang!!)) {
-                Lang.UA -> "Телефоний дзвінок"
+                Lang.UA -> "Телефонний дзвінок"
                 Lang.RU -> "Телефонный звонок"
                 Lang.EN -> "Phone call"
             }

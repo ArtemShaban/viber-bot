@@ -6,10 +6,10 @@ class EmergencyHelpBotRequest(state: BotLogicState) : UserRequest<EmergencyHelpB
 
     override fun getMessage(): String {
         return when (Lang.valueOf(state.userLang!!)) {
-            Lang.UA -> "Щоб оперативно отримати допомогу, перейдіть в Вайбер групу за кнопкою нижче, і напишіть якесь повідомлення." +
-                    "\nНаприклад: \"Здрастуйте, мені потрібна екстрена допомога. Мій контактний телефон: xxx-xx-xxxxxx\""
-            Lang.RU -> "Чтобы оперативно получить помощь, перейдите в Вайбер группу по кнопке ниже, и напишите какое-нибудь сообщение." +
-                    "\nНапример: \"Здравствуйте, мне нужна экстренная помощь. Мой номер телефона: xxx-xx-xxxxxx\""
+            Lang.UA -> "Щоб оперативно отримати допомогу, перейдіть в Вайбер групу за кнопкою нижче, і напишіть коротке повідомлення." +
+                    "\nНаприклад: \"Хочу щоб мені допомогли . Мій контактний телефон: xxx-xx-xxxxxx\""
+            Lang.RU -> "Чтобы оперативно получить помощь, перейдите в Вайбер группу по кнопке ниже, и напишите короткое сообщение." +
+                    "\nНапример:\"Хочу получить консультацию. Мой номер телефона: xxx-xx-xxxxxx\""
             Lang.EN -> "To get help quickly, go to the Viber group by clicking the button below and write any message." +
                     "\nFor example: \"Hello, I need emergency assistance. My contact phone: xxx-xx-xxxxxx\""
         }
