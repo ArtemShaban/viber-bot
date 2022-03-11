@@ -15,17 +15,17 @@ class FinishBotRequest(state: BotLogicState) : UserRequest<FinishBotRequest.Opti
     override fun getMessage(): String {
         return when (ContactTypeRequest.ContactType.get(state)) {
             ContactTypeRequest.ContactType.PHONE_CALL -> when (Lang.valueOf(state.userLang!!)) {
-                Lang.UA -> "Передаємо ваш номер психологу, який вийде на зв'язок в найближчу годину в телефонному режимі. Дякуємо і ми будьте певні - Ми переможемо!"
+                Lang.UA -> "Передаємо ваш номер психологу, який вийде на зв'язок в найближчу годину в телефонному режимі. Дякуємо будьте певні - Ми переможемо!"
                 Lang.RU -> "Передаем ваш номер психологу, который выйдет на связь в ближайшее время в телефонном режиме. Благодарим и уверяем - Мы победим!"
                 Lang.EN -> "We'll give your number to the psychologist, who will contact you in the near future by phone. Thank you and be sure."
             }
             ContactTypeRequest.ContactType.VIBER_CHAT -> when (Lang.valueOf(state.userLang!!)) {
-                Lang.UA -> "Передаємо ваш номер психологу, який вийде на зв'язок в найближчу годину в Viber. Дякуємо і ми будьте певні - Ми переможемо!"
+                Lang.UA -> "Передаємо ваш номер психологу, який вийде на зв'язок в найближчу годину в Viber. Дякуємо будьте певні - Ми переможемо!"
                 Lang.RU -> "Передаем ваш номер психологу, который свяжется с вами ближайшее время в Viber. Благодарим и уверяем - Мы победим!"
                 Lang.EN -> "We'll give your number to the psychologist, who will contact you in the near future by Viber. Thank you and be sure."
             }
             ContactTypeRequest.ContactType.ZOOM_MEETING -> when (Lang.valueOf(state.userLang!!)) {
-                Lang.UA -> "Просимо перейти до Zoom кімнати, де наш координатор направить вас до чергового психолога. Дякуємо і ми будьте певні - Ми переможемо!"
+                Lang.UA -> "Просимо перейти до Zoom кімнати, де наш координатор направить вас до чергового психолога. Дякуємо будьте певні - Ми переможемо!"
                 Lang.RU -> "Просим перейти в Zoom комнату, где наш координатор направит вас к дежурному психологу. Благодарим и уверяем - Мы победим!"
                 Lang.EN -> "Please follow Zoom room, where our coordinator will direct you to the psychologist on duty. Thank you and be sure."
             }
