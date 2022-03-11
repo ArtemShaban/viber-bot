@@ -29,15 +29,15 @@ class ContactTypeRequest(state: BotLogicState) : UserRequest<ContactTypeRequest.
                 Lang.EN -> "Phone call"
             }
             ContactType.ZOOM_MEETING -> when (Lang.valueOf(state.userLang!!)) {
-                Lang.UA -> "Zoom зустріч з психологом"
-                Lang.RU -> "Zoom встреча с психологом"
-                Lang.EN -> "Zoom meeting with a psychologist"
+                Lang.UA -> "Zoom зустріч з психологом (8.00-22.00)"
+                Lang.RU -> "Zoom встреча с психологом (8.00-22.00)"
+                Lang.EN -> "Zoom meeting with a psychologist (8.00-22.00)"
             }
         }
     }
 
     enum class ContactType : UserOption {
-        VIBER_CHAT, PHONE_CALL, ZOOM_MEETING;
+        VIBER_CHAT, ZOOM_MEETING, PHONE_CALL;
 
         companion object {
             fun get(state: BotLogicState): ContactType =
