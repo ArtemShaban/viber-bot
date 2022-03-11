@@ -7,9 +7,9 @@ class EnterPhoneRequest(state: BotLogicState) : UserRequest<EnterPhoneRequest.Op
 
     override fun getMessage(): String {
         return when (Lang.valueOf(state.userLang!!)) {
-            Lang.UA -> "Залиште ваш контактний номер і зараз ми передаємо ваш номер психологу, який вийде на зв'язок в найближчу годину."
-            Lang.RU -> "Оставьте ваш контактный номер и сейчас мы передаем ваш номер психологу, который выйдет на связь в ближайшее время."
-            Lang.EN -> "Please leave your contact information and we will give your number to the psychologist, who will contact you in the near future."
+            Lang.UA -> "Ваш контактний номер для зв'язку"
+            Lang.RU -> "Ваш контактный номер для связи"
+            Lang.EN -> "Your active mobile number"
         }
     }
 
