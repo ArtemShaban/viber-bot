@@ -3,7 +3,6 @@ package com.example.logic
 import com.example.api.model.User
 import com.example.logic.request.*
 import com.example.logic.request.CheckStateRequest.UserState
-import com.example.logic.request.ContactTypeRequest.ContactType
 
 class BotLogic(private val state: BotLogicState = BotLogicState()) {
     private val emailLogic = EmailLogic()
@@ -13,6 +12,7 @@ class BotLogic(private val state: BotLogicState = BotLogicState()) {
         return when {
             state.userLang == null -> WelcomeRequest(state)
             state.userName == null -> EnterNameRequest(state)
+            state.phoneNumber == null -> EnterPhoneRequest(state)
             state.state == null -> CheckStateRequest(state)
             state.emergencyHelpShown != null -> null
             UserState.EMERGENCY == UserState.get(state) -> EmergencyHelpBotRequest(state)
@@ -20,16 +20,8 @@ class BotLogic(private val state: BotLogicState = BotLogicState()) {
             state.stressLevel == null -> StressLevelRequest(state)
             state.stressSource == null -> ChooseSourceRequest(state)
             state.contactType == null -> ContactTypeRequest(state)
-
+            state.finished == null -> handleFinishedState(state)
             state.finished != null -> null
-            state.phoneNumber != null -> handleFinishedState(state)
-
-            //ask for phone number if case of PHONE_CALL and VIBER_CHAT contact types.
-            ContactType.PHONE_CALL == ContactType.get(state) || ContactType.VIBER_CHAT == ContactType.get(state)
-            -> EnterPhoneRequest(state)
-
-            //show finish page for Zoom contact types
-            ContactType.ZOOM_MEETING == ContactType.get(state) -> handleFinishedState(state)
 
             else -> WelcomeRequest(state)
         }
@@ -48,6 +40,7 @@ fun updateState(state: BotLogicState, newInput: String, user: User): BotLogicSta
     when {
         state.userLang == null -> state.userLang = newInput
         state.userName == null -> state.userName = newInput
+        state.phoneNumber == null -> state.phoneNumber = newInput
         state.state == null -> state.state = newInput
         UserState.EMERGENCY == UserState.get(state) -> {
             state.emergencyHelpShown = true
@@ -58,10 +51,6 @@ fun updateState(state: BotLogicState, newInput: String, user: User): BotLogicSta
         state.stressLevel == null -> state.stressLevel = newInput.toInt()
         state.stressSource == null -> state.stressSource = newInput
         state.contactType == null -> state.contactType = newInput
-        //remember phone number for PHONE_CALL and PHONE_CALL contact type
-        state.phoneNumber == null && (ContactType.PHONE_CALL == ContactType.get(state) || ContactType.VIBER_CHAT == ContactType.get(
-            state))
-        -> state.phoneNumber = newInput
 
         state.finished == null -> {
             state.finished = true
