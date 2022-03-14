@@ -15,7 +15,6 @@ application {
 
 repositories {
     mavenCentral()
-    maven(url = "https://jitpack.io")
 }
 
 dependencies {
@@ -38,9 +37,6 @@ dependencies {
     implementation("org.apache.commons:commons-email:1.5")
     implementation("com.sun.mail:javax.mail:1.6.2")
 
-    //Telegram
-    implementation("com.github.kotlin-telegram-bot:kotlin-telegram-bot:6.0.6")
-
     //Google Sheets
     implementation("com.google.api-client:google-api-client:1.33.0")
     implementation("com.google.oauth-client:google-oauth-client-jetty:1.32.1")
@@ -49,15 +45,6 @@ dependencies {
     //test
     testImplementation("io.ktor:ktor-server-tests:$ktor_version")
     testImplementation("org.jetbrains.kotlin:kotlin-test")
-}
-
-//workaround for duplicate strategy issues on server after tg library adding
-gradle.taskGraph.whenReady {
-    allTasks
-        .filter { it.hasProperty("duplicatesStrategy") } // Because it's some weird decorated wrapper that I can't cast.
-        .forEach {
-            it.setProperty("duplicatesStrategy", "WARN")
-        }
 }
 
 tasks.create("stage") {
