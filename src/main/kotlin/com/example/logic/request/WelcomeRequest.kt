@@ -15,7 +15,7 @@ class WelcomeRequest(state: BotLogicState) : UserRequest<Lang>(state) {
         return mapOf(
             Pair(Lang.UA, "Українська \uD83C\uDDFA\uD83C\uDDE6"),
             Pair(Lang.EN, "English"),
-            Pair(Lang.RU, "Русский"),
+//            Pair(Lang.RU, "Русский"),
         )
     }
 }
