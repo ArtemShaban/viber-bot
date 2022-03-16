@@ -8,15 +8,6 @@ import com.example.logic.BotLogicState
 import com.example.logic.request.UserOption
 import com.example.logic.request.UserRequest
 import com.example.logic.updateState
-import com.github.kotlintelegrambot.Bot
-import com.github.kotlintelegrambot.bot
-import com.github.kotlintelegrambot.dispatch
-import com.github.kotlintelegrambot.dispatcher.callbackQuery
-import com.github.kotlintelegrambot.dispatcher.command
-import com.github.kotlintelegrambot.dispatcher.text
-import com.github.kotlintelegrambot.entities.*
-import com.github.kotlintelegrambot.entities.keyboard.InlineKeyboardButton
-import com.github.kotlintelegrambot.network.fold
 import io.ktor.application.*
 import io.ktor.client.call.*
 import io.ktor.http.*
@@ -25,8 +16,6 @@ import io.ktor.response.*
 import io.ktor.routing.*
 import mu.KotlinLogging
 import java.io.StringReader
-import java.net.URLDecoder
-import java.net.URLEncoder
 
 private val logger = KotlinLogging.logger { }
 private val klaxon = Klaxon()
@@ -36,7 +25,6 @@ fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
 fun Application.module(testing: Boolean = false) {
     val viberApiSender = ViberApiSender()
 
-    //bind viber handling
     routing {
         get("/") {
             call.respondText("Hello, world!")
@@ -82,79 +70,6 @@ fun Application.module(testing: Boolean = false) {
             call.respond(HttpStatusCode.OK, response)
         }
     }
-
-//    //bind tg handling
-    val tgBot = bot {
-        token = getTgBotToken()
-        dispatch {
-            command("start") {
-                logger.debug { "tg new start command" }
-                tgSendNewRequest(bot, message.chat.id, BotLogic().getNextUserRequest(), update)
-
-            }
-            text {
-                logger.debug { "tg new message with text $text and reply to message ${message.replyToMessage}" }
-                if (message.replyToMessage != null) {
-                    val request = tgGetNextRequest(message.replyToMessage!!, text)
-                    tgSendNewRequest(bot, message.replyToMessage!!.chat.id, request, update)
-                } else {
-                    tgSendNewRequest(bot, message.chat.id, BotLogic().getNextUserRequest(), update)
-                }
-            }
-            callbackQuery {
-                logger.debug { "tg new callback query with data ${callbackQuery.data} and reply to message:${callbackQuery.message}" }
-                if (callbackQuery.message != null) {
-                    val request = tgGetNextRequest(callbackQuery.message!!, callbackQuery.data)
-                    tgSendNewRequest(bot, callbackQuery.message!!.chat.id, request, update)
-                }
-            }
-        }
-    }
-    tgBot.startPolling()
-}
-
-fun tgSendNewRequest(bot: Bot, chatId: Long, request: UserRequest<*>?, update: Update) {
-    if (request != null) {
-        val encodedState = URLEncoder.encode(klaxon.toJsonString(request.state), "utf-8")
-        val text = "${request.getMessage()}<a href=\"tg://btn/$encodedState\">\u200b</a>"
-        val replyMarkup = if (request.getOptions().isNotEmpty()) {
-            InlineKeyboardMarkup.create(
-                request.getOptions().map {
-                    val url = (it.key as? UserOption)?.getUrl()
-                    listOf(
-                        if (url != null) InlineKeyboardButton.Url(
-                            it.value,
-                            url
-                        ) else InlineKeyboardButton.CallbackData(it.value, it.key.name)
-                    )
-                })
-        } else {
-            ForceReplyMarkup(true)
-        }
-        bot.sendMessage(
-            chatId = ChatId.fromId(chatId),
-            text = text,
-            parseMode = ParseMode.HTML,
-            replyMarkup = replyMarkup
-        ).fold({
-            logger.debug { "tg send message response is $it" }
-        }, {
-            logger.error { "tg send message error ${it.errorBody}" }
-        })
-        update.consume()
-    }
-}
-
-fun tgGetNextRequest(message: Message, data: String): UserRequest<*>? {
-    val stateString =
-        message.entities?.find { it.type == MessageEntity.Type.TEXT_LINK }?.url?.substringAfter("tg://btn/")
-    val state = if (stateString != null) klaxon.parse<BotLogicState>(
-        URLDecoder.decode(stateString, "utf-8")
-    )?.let {
-        updateState(it, data, null)
-    } else null
-    val logic = if (state != null) BotLogic(state) else BotLogic()
-    return logic.getNextUserRequest()
 }
 
 fun handleConversationStarted(event: ConversationStartedEvent): String {
@@ -229,10 +144,6 @@ private fun newMessage(userRequest: UserRequest<*>, receiverId: String? = null):
         )
     }
     return klaxon.toJsonString(message)
-}
-
-private fun getTgBotToken(): String {
-    return System.getenv("TG_TOKEN") ?: throw RuntimeException("TG_TOKEN env variable it not specified")
 }
 
 class Constants {
