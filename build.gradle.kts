@@ -57,14 +57,14 @@ dependencies {
     testImplementation("org.jetbrains.kotlin:kotlin-test")
 }
 
-////workaround for duplicate strategy issues on server after tg library adding
-//gradle.taskGraph.whenReady {
-//    allTasks
-//        .filter { it.hasProperty("duplicatesStrategy") } // Because it's some weird decorated wrapper that I can't cast.
-//        .forEach {
-//            it.setProperty("duplicatesStrategy", "WARN")
-//        }
-//}
+//workaround for duplicate strategy issues on server after tg library adding
+gradle.taskGraph.whenReady {
+    allTasks
+        .filter { it.hasProperty("duplicatesStrategy") } // Because it's some weird decorated wrapper that I can't cast.
+        .forEach {
+            it.setProperty("duplicatesStrategy", "WARN")
+        }
+}
 
 tasks.create("stage") {
     dependsOn("installDist")
