@@ -10,12 +10,16 @@ class ViberApiSender {
     private val AUTH_HEADER_NAME = "X-Viber-Auth-Token"
 
     suspend fun sendMessage(messageBody: String): HttpResponse {
-        val response: HttpResponse = client.post("https://chatapi.viber.com/pa/send_message") {
+        val client1 = HttpClient(CIO)
+
+        val response: HttpResponse = client1.post("https://chatapi.viber.com/pa/send_message") {
             headers {
                 append(AUTH_HEADER_NAME, getAuthToken())
             }
             body = messageBody
         }
+        client1.close()
+
         return response
     }
 
