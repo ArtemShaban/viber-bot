@@ -1,11 +1,14 @@
 package com.example.api.sender
 
 import io.ktor.client.*
+import io.ktor.client.call.*
 import io.ktor.client.engine.cio.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
+import mu.KotlinLogging
 
 class ViberApiSender {
+    private val logger = KotlinLogging.logger { }
     private val client = HttpClient(CIO)
     private val AUTH_HEADER_NAME = "X-Viber-Auth-Token"
 
@@ -16,6 +19,8 @@ class ViberApiSender {
             }
             body = messageBody
         }
+        val responseBody: String = response.receive()
+        logger.trace { "Send message response:$response -> $responseBody" }
         return response
     }
 
