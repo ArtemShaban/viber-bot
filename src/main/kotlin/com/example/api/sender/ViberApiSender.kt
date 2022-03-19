@@ -7,15 +7,16 @@ import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import mu.KotlinLogging
 
-class ViberApiSender {
+
+class ViberApiSender(private val serverHostname: String) {
     private val logger = KotlinLogging.logger { }
     private val client = HttpClient(CIO)
-    private val AUTH_HEADER_NAME = "X-Viber-Auth-Token"
+    private val authHeaderName = "X-Viber-Auth-Token"
 
     suspend fun sendMessage(messageBody: String): HttpResponse {
         val response: HttpResponse = client.post("https://chatapi.viber.com/pa/send_message") {
             headers {
-                append(AUTH_HEADER_NAME, getAuthToken())
+                append(authHeaderName, getAuthToken())
             }
             body = messageBody
         }
@@ -27,11 +28,11 @@ class ViberApiSender {
     suspend fun registerBotWebhook(): HttpResponse {
         val response: HttpResponse = client.post("https://chatapi.viber.com/pa/set_webhook") {
             headers {
-                append(AUTH_HEADER_NAME, getAuthToken())
+                append(authHeaderName, getAuthToken())
             }
             body = """
             {
-               "url":"https://viber-bot-ua-help.herokuapp.com/webhook",
+               "url":"$serverHostname/webhook",
                "send_name": true,
                "send_photo": true
             }

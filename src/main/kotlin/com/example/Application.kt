@@ -17,6 +17,7 @@ import com.github.kotlintelegrambot.dispatcher.text
 import com.github.kotlintelegrambot.entities.*
 import com.github.kotlintelegrambot.entities.keyboard.InlineKeyboardButton
 import com.github.kotlintelegrambot.network.fold
+import com.github.kotlintelegrambot.webhook
 import io.ktor.application.*
 import io.ktor.client.call.*
 import io.ktor.http.*
@@ -28,15 +29,14 @@ import java.io.StringReader
 import java.net.URLDecoder
 import java.net.URLEncoder
 
+private const val SERVER_HOSTNAME = "https://viber-bot-ua-help.herokuapp.com"
 private val logger = KotlinLogging.logger { }
 private val klaxon = Klaxon()
 
 fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
 
 fun Application.module(testing: Boolean = false) {
-    val viberApiSender = ViberApiSender()
 
-    //bind viber handling
     routing {
         get("/") {
             call.respondText("Hello, world!")
@@ -48,6 +48,10 @@ fun Application.module(testing: Boolean = false) {
             val resource = this::class.java.classLoader.getResource("bot.html")!!.readText(Charsets.UTF_8)
             call.respondText(resource, ContentType.Text.Html)
         }
+        /*-----------------------------------------------------------*/
+        //bind viber handling
+        val viberApiSender = ViberApiSender(SERVER_HOSTNAME)
+
         get("/register_webhook") {
             val response = viberApiSender.registerBotWebhook()
             val stringBody: String = response.receive()
@@ -81,36 +85,59 @@ fun Application.module(testing: Boolean = false) {
             logger.debug { "Sending response: $response" }
             call.respond(HttpStatusCode.OK, response)
         }
+
+        /*-----------------------------------------------------------*/
+        //bind tg handling
+        val tgBot = initTgBot()
+        tgBot.startWebhook()
+
+        //todo think maybe we can use another url?
+        post("/${getTgBotToken()}") {
+            val response = call.receiveText()
+            tgBot.processUpdate(response)
+            call.respond(HttpStatusCode.OK)
+        }
     }
 
-//    //bind tg handling
-    val tgBot = bot {
-        token = getTgBotToken()
-        dispatch {
-            command("start") {
-                logger.debug { "tg new start command" }
-                tgSendNewRequest(bot, message.chat.id, BotLogic().getNextUserRequest(), update)
+}
 
+private fun initTgBot() = bot {
+    val tgBotToken = getTgBotToken()
+    token = tgBotToken
+
+    webhook {
+        url = "${SERVER_HOSTNAME}/${tgBotToken}"
+        /* This certificate argument is only needed when you want Telegram to trust your
+        * self-signed certificates. If you have a CA trusted certificate you can omit it.
+        * More info -> https://core.telegram.org/bots/webhooks */
+//        certificate = TelegramFile.ByFile(File(CertificateUtils.certPath))
+//        maxConnections = 50
+        allowedUpdates = listOf("message", "callback_query")
+    }
+
+    dispatch {
+        command("start") {
+            logger.debug { "tg new start command" }
+            tgSendNewRequest(bot, message.chat.id, BotLogic().getNextUserRequest(), update)
+
+        }
+        text {
+            logger.debug { "tg new message with text $text and reply to message ${message.replyToMessage}" }
+            if (message.replyToMessage != null) {
+                val request = tgGetNextRequest(message.replyToMessage!!, text)
+                tgSendNewRequest(bot, message.replyToMessage!!.chat.id, request, update)
+            } else {
+                tgSendNewRequest(bot, message.chat.id, BotLogic().getNextUserRequest(), update)
             }
-            text {
-                logger.debug { "tg new message with text $text and reply to message ${message.replyToMessage}" }
-                if (message.replyToMessage != null) {
-                    val request = tgGetNextRequest(message.replyToMessage!!, text)
-                    tgSendNewRequest(bot, message.replyToMessage!!.chat.id, request, update)
-                } else {
-                    tgSendNewRequest(bot, message.chat.id, BotLogic().getNextUserRequest(), update)
-                }
-            }
-            callbackQuery {
-                logger.debug { "tg new callback query with data ${callbackQuery.data} and reply to message:${callbackQuery.message}" }
-                if (callbackQuery.message != null) {
-                    val request = tgGetNextRequest(callbackQuery.message!!, callbackQuery.data)
-                    tgSendNewRequest(bot, callbackQuery.message!!.chat.id, request, update)
-                }
+        }
+        callbackQuery {
+            logger.debug { "tg new callback query with data ${callbackQuery.data} and reply to message:${callbackQuery.message}" }
+            if (callbackQuery.message != null) {
+                val request = tgGetNextRequest(callbackQuery.message!!, callbackQuery.data)
+                tgSendNewRequest(bot, callbackQuery.message!!.chat.id, request, update)
             }
         }
     }
-    tgBot.startPolling()
 }
 
 fun tgSendNewRequest(bot: Bot, chatId: Long, request: UserRequest<*>?, update: Update) {
