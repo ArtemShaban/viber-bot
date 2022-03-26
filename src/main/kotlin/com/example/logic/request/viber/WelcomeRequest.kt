@@ -1,8 +1,10 @@
-package com.example.logic.request
+package com.example.logic.request.viber
 
-import com.example.logic.BotLogicState
+import com.example.logic.ViberBotLogic
+import com.example.logic.request.Lang
+import com.example.logic.request.UserRequest
 
-class WelcomeRequest(state: BotLogicState) : UserRequest<Lang>(state) {
+class WelcomeRequest(state: ViberBotLogic.State) : UserRequest<Lang>(state) {
     override fun getMessage(): String {
         return "Доброго дня!" +
                 "\nДякуємо, що звернулися до нашої служби #психологічної підтримки!" +

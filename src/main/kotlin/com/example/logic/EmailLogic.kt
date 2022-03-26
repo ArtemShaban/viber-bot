@@ -1,14 +1,14 @@
 package com.example.logic
 
 import com.example.email.EmailSender
-import com.example.logic.request.CheckStateRequest
-import com.example.logic.request.ChooseSourceRequest
-import com.example.logic.request.ContactTypeRequest
+import com.example.logic.request.viber.CheckStateRequest
+import com.example.logic.request.viber.ChooseSourceRequest
+import com.example.logic.request.viber.ContactTypeRequest
 
 class EmailLogic {
     private val emailSender = EmailSender()
 
-    fun sendEmail(state: BotLogicState) {
+    fun sendEmail(state: ViberBotLogic.State) {
         val userCondition = CheckStateRequest.UserState.valueOf(state.state!!)
         val userConditionAnswer = CheckStateRequest(state).getOptions()[userCondition]
 
@@ -36,9 +36,9 @@ class EmailLogic {
         )
     }
 
-    private fun getTitle(state: BotLogicState): String {
-        val contactType = ContactTypeRequest.ContactType.valueOf(state.contactType!!)
-        return when (contactType) {
+    private fun getTitle(state: ViberBotLogic.State): String {
+        return when (
+            ContactTypeRequest.ContactType.valueOf(state.contactType!!)) {
             ContactTypeRequest.ContactType.PHONE_CALL -> "[звонок] Запрос на психологическую помощь из viber чат бота"
             ContactTypeRequest.ContactType.VIBER_CHAT -> "[viber] Пользователь запросил помощь через viber из viber чат бота"
             ContactTypeRequest.ContactType.ZOOM_MEETING -> "[zoom] Пользователь запросил помощь через zoom из viber чат бота"

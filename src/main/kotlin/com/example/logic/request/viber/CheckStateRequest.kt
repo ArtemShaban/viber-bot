@@ -1,8 +1,12 @@
-package com.example.logic.request
+package com.example.logic.request.viber
 
-import com.example.logic.BotLogicState
+import com.example.logic.ViberBotLogic
+import com.example.logic.request.Lang
+import com.example.logic.request.UserOption
+import com.example.logic.request.UserRequest
 
-class CheckStateRequest(state: BotLogicState) : UserRequest<CheckStateRequest.UserState>(state) {
+class CheckStateRequest(override val state: ViberBotLogic.State) :
+    UserRequest<CheckStateRequest.UserState>(state) {
 
     override fun getMessage(): String {
         return when (Lang.valueOf(state.userLang!!)) {
@@ -39,7 +43,7 @@ class CheckStateRequest(state: BotLogicState) : UserRequest<CheckStateRequest.Us
         FINE;
 
         companion object {
-            fun get(state: BotLogicState): UserState =
+            fun get(state: ViberBotLogic.State): UserState =
                 valueOf(state.state!!)
         }
     }

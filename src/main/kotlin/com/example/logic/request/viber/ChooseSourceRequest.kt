@@ -1,8 +1,12 @@
-package com.example.logic.request
+package com.example.logic.request.viber
 
-import com.example.logic.BotLogicState
+import com.example.logic.ViberBotLogic
+import com.example.logic.request.Lang
+import com.example.logic.request.UserOption
+import com.example.logic.request.UserRequest
 
-class ChooseSourceRequest(state: BotLogicState) : UserRequest<ChooseSourceRequest.Option>(state) {
+class ChooseSourceRequest(override val state: ViberBotLogic.State) :
+    UserRequest<ChooseSourceRequest.Option>(state) {
 
     override fun getMessage(): String {
         return when (Lang.valueOf(state.userLang!!)) {

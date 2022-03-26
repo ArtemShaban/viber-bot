@@ -4,10 +4,10 @@ import com.beust.klaxon.Klaxon
 import com.example.api.model.*
 import com.example.api.sender.ViberApiSender
 import com.example.logic.BotLogic
-import com.example.logic.BotLogicState
+import com.example.logic.BotLogic.MessengerType
+import com.example.logic.UserInfo
 import com.example.logic.request.UserOption
 import com.example.logic.request.UserRequest
-import com.example.logic.updateState
 import com.github.kotlintelegrambot.Bot
 import com.github.kotlintelegrambot.bot
 import com.github.kotlintelegrambot.dispatch
@@ -118,22 +118,40 @@ private fun initTgBot() = bot {
     dispatch {
         command("start") {
             logger.debug { "tg new start command" }
-            tgSendNewRequest(bot, message.chat.id, BotLogic().getNextUserRequest(), update)
+            tgSendNewRequest(
+                bot,
+                message.chat.id,
+                BotLogic.fromStart(MessengerType.TELEGRAM).getNextUserRequest(),
+                update
+            )
 
         }
         text {
             logger.debug { "tg new message with text $text and reply to message ${message.replyToMessage}" }
             if (message.replyToMessage != null) {
-                val request = tgGetNextRequest(message.replyToMessage!!, text)
+                val request = tgGetNextRequest(
+                    message.replyToMessage!!,
+                    text,
+                    if (message.from != null) UserInfo(message.from!!) else null
+                )
                 tgSendNewRequest(bot, message.replyToMessage!!.chat.id, request, update)
             } else {
-                tgSendNewRequest(bot, message.chat.id, BotLogic().getNextUserRequest(), update)
+                tgSendNewRequest(
+                    bot,
+                    message.chat.id,
+                    BotLogic.fromStart(MessengerType.TELEGRAM).getNextUserRequest(),
+                    update
+                )
             }
         }
         callbackQuery {
             logger.debug { "tg new callback query with data ${callbackQuery.data} and reply to message:${callbackQuery.message}" }
             if (callbackQuery.message != null) {
-                val request = tgGetNextRequest(callbackQuery.message!!, callbackQuery.data)
+                val request = tgGetNextRequest(
+                    callbackQuery.message!!,
+                    callbackQuery.data,
+                    UserInfo(callbackQuery.from)
+                )
                 tgSendNewRequest(bot, callbackQuery.message!!.chat.id, request, update)
             }
         }
@@ -172,21 +190,21 @@ fun tgSendNewRequest(bot: Bot, chatId: Long, request: UserRequest<*>?, update: U
     }
 }
 
-fun tgGetNextRequest(message: Message, data: String): UserRequest<*>? {
+fun tgGetNextRequest(message: Message, data: String, userInfo: UserInfo?): UserRequest<*>? {
     val stateString =
         message.entities?.find { it.type == MessageEntity.Type.TEXT_LINK }?.url?.substringAfter("tg://btn/")
-    val state = if (stateString != null) klaxon.parse<BotLogicState>(
-        URLDecoder.decode(stateString, "utf-8")
-    )?.let {
-        updateState(it, data, null)
-    } else null
-    val logic = if (state != null) BotLogic(state) else BotLogic()
+    val logic = BotLogic.fromState(
+        MessengerType.TELEGRAM,
+        URLDecoder.decode(stateString, "utf-8"),
+        userInfo
+    )
+    logic.updateState(data)
     return logic.getNextUserRequest()
 }
 
 fun handleConversationStarted(event: ConversationStartedEvent): String {
     logger.debug { "Handling conversation started event: $event" }
-    val userRequest = BotLogic().getNextUserRequest()
+    val userRequest = BotLogic.fromStart(MessengerType.VIBER).getNextUserRequest()
     return if (userRequest != null) {
         newMessage(userRequest)
     } else {
@@ -197,14 +215,11 @@ fun handleConversationStarted(event: ConversationStartedEvent): String {
 suspend fun handleClientMessage(event: ClientMessageEvent, viberApiSender: ViberApiSender) {
     logger.debug { "Handling client message event: $event" }
 
-    val state: BotLogicState? =
-        if (event.message.trackingData != null) {
-            val oldState = klaxon.parse<BotLogicState>(event.message.trackingData)!!
-            updateState(oldState, newInput = event.message.text!!, event.sender)
-        } else {
-            null
-        }
-    val logic = if (state != null) BotLogic(state) else BotLogic()
+    val logic =
+        BotLogic.fromState(MessengerType.VIBER, event.message.trackingData, UserInfo(event.sender))
+    if (event.message.text != null) {
+        logic.updateState(event.message.text)
+    }
     val userRequest = logic.getNextUserRequest()
     val messageBodyToSend =
         if (userRequest != null) newMessage(userRequest, event.sender.id) else ""

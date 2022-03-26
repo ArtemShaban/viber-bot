@@ -1,77 +1,47 @@
 package com.example.logic
 
-import com.example.api.model.User
-import com.example.logic.request.*
-import com.example.logic.request.CheckStateRequest.UserState
+import com.beust.klaxon.Klaxon
+import com.example.logic.request.UserRequest
 
-class BotLogic(private val state: BotLogicState = BotLogicState()) {
-    private val emailLogic = EmailLogic()
-    private val spreadsheetLogic = SpreadsheetLogic()
+abstract class BotLogic<State> protected constructor(
+    protected val state: State,
+    protected val userInfo: UserInfo?
+) {
+    abstract fun getNextUserRequest(): UserRequest<*>?
+    abstract fun updateState(newInput: String)
 
-    fun getNextUserRequest(): UserRequest<*>? {
-        return when {
-            state.userLang == null -> WelcomeRequest(state)
-            state.userName == null -> EnterNameRequest(state)
-            state.phoneNumber == null -> EnterPhoneRequest(state)
-            state.state == null -> CheckStateRequest(state)
-            state.emergencyHelpShown != null -> null
-            UserState.EMERGENCY == UserState.get(state) -> EmergencyHelpBotRequest(state)
+    enum class MessengerType { VIBER, TELEGRAM }
 
-            state.stressLevel == null -> StressLevelRequest(state)
-            state.stressSource == null -> ChooseSourceRequest(state)
-            state.contactType == null -> ContactTypeRequest(state)
-            state.finished == null -> handleFinishedState(state)
-            state.finished != null -> null
+    companion object {
+        private val klaxon by lazy { Klaxon() }
 
-            else -> WelcomeRequest(state)
+        fun fromStart(type: MessengerType): BotLogic<*> {
+            return when (type) {
+                MessengerType.VIBER -> ViberBotLogic(null, null)
+                MessengerType.TELEGRAM -> TelegramBotLogic(null, null)
+            }
         }
-    }
 
-    private fun handleFinishedState(state: BotLogicState): FinishBotRequest {
-//        emailLogic.sendEmail(state) //Send email when user finished all bot steps.
-        if (state.userMessengerInfo != null) {
-            SpreadsheetLogic().addUserDataToSpreadsheet(state)
+        fun fromState(
+            type: MessengerType,
+            stateJsonString: String?,
+            userInfo: UserInfo?
+        ): BotLogic<*> {
+            return when (type) {
+                MessengerType.VIBER -> {
+                    val state = if (stateJsonString != null) klaxon.parse<ViberBotLogic.State>(
+                        stateJsonString
+                    ) else null
+                    ViberBotLogic(state, userInfo)
+                }
+                MessengerType.TELEGRAM -> {
+                    val state = if (stateJsonString != null) klaxon.parse<TelegramBotLogic.State>(
+                        stateJsonString
+                    ) else null
+                    TelegramBotLogic(state, userInfo)
+                }
+            }
         }
-        return FinishBotRequest(state)
     }
 }
 
-fun updateState(state: BotLogicState, newInput: String, user: User?): BotLogicState? {
-    state.userMessengerInfo = user
-
-    when {
-        state.userLang == null -> state.userLang = newInput
-        state.userName == null -> state.userName = newInput
-        state.phoneNumber == null -> state.phoneNumber = newInput
-        state.state == null -> state.state = newInput
-        UserState.EMERGENCY == UserState.get(state) -> {
-            state.emergencyHelpShown = true
-            if (EmergencyHelpBotRequest.Option.RESTART.name == newInput) return null
-        }
-
-        //todo need to validate stress level, if not int - send a message.
-        state.stressLevel == null -> state.stressLevel = newInput.toInt()
-        state.stressSource == null -> state.stressSource = newInput
-        state.contactType == null -> state.contactType = newInput
-
-        state.finished == null -> {
-            state.finished = true
-            if (FinishBotRequest.Option.RESTART.name == newInput) return null
-        }
-    }
-    return state
-}
-
-data class BotLogicState(
-    var userLang: String? = null,
-    var userName: String? = null,
-    var state: String? = null,
-    var emergencyHelpShown: Boolean? = null,
-    var stressLevel: Int? = null,
-    var stressSource: String? = null,
-    var contactType: String? = null,
-    var phoneNumber: String? = null,
-    var finished: Boolean? = null,
-
-    var userMessengerInfo: User? = null,
-)

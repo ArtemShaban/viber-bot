@@ -1,8 +1,12 @@
-package com.example.logic.request
+package com.example.logic.request.viber
 
-import com.example.logic.BotLogicState
+import com.example.logic.ViberBotLogic
+import com.example.logic.request.Lang
+import com.example.logic.request.UserOption
+import com.example.logic.request.UserRequest
 
-class ContactTypeRequest(state: BotLogicState) : UserRequest<ContactTypeRequest.ContactType>(state) {
+class ContactTypeRequest(override val state: ViberBotLogic.State) :
+    UserRequest<ContactTypeRequest.ContactType>(state) {
 
     override fun getMessage(): String {
         return when (Lang.valueOf(state.userLang!!)) {
@@ -40,7 +44,7 @@ class ContactTypeRequest(state: BotLogicState) : UserRequest<ContactTypeRequest.
         PHONE_CALL, ZOOM_MEETING, VIBER_CHAT;
 
         companion object {
-            fun get(state: BotLogicState): ContactType =
+            fun get(state: ViberBotLogic.State): ContactType =
                 valueOf(state.contactType!!)
         }
     }

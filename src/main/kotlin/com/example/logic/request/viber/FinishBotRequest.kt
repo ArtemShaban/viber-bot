@@ -1,8 +1,12 @@
-package com.example.logic.request
+package com.example.logic.request.viber
 
-import com.example.logic.BotLogicState
+import com.example.logic.ViberBotLogic
+import com.example.logic.request.Lang
+import com.example.logic.request.UserOption
+import com.example.logic.request.UserRequest
 
-class FinishBotRequest(state: BotLogicState) : UserRequest<FinishBotRequest.Option>(state) {
+class FinishBotRequest(override val state: ViberBotLogic.State) :
+    UserRequest<FinishBotRequest.Option>(state) {
     enum class Option : UserOption {
         RESTART,
         ZOOM {

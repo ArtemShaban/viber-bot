@@ -1,8 +1,12 @@
-package com.example.logic.request
+package com.example.logic.request.viber
 
-import com.example.logic.BotLogicState
+import com.example.logic.ViberBotLogic
+import com.example.logic.request.Lang
+import com.example.logic.request.UserOption
+import com.example.logic.request.UserRequest
 
-class EnterPhoneRequest(state: BotLogicState) : UserRequest<EnterPhoneRequest.Option>(state) {
+class EnterPhoneRequest(override val state: ViberBotLogic.State) :
+    UserRequest<EnterPhoneRequest.Option>(state) {
     enum class Option : UserOption
 
     override fun getMessage(): String {
