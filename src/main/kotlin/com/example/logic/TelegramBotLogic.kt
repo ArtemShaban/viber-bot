@@ -19,8 +19,13 @@ class TelegramBotLogic internal constructor(state: State?, userInfo: UserInfo?) 
             state.introContinued == null -> IntroMessageRequest(state)
             state.userName == null -> EnterNameRequest(state)
             state.phoneNumber == null -> EnterPhoneRequest(state)
-            else -> ContactsInfoRequest(state)
+            else -> handleLastState()
         }
+    }
+
+    private fun handleLastState(): ContactsInfoRequest {
+        SpreadsheetLogic().addTelegramUserDataToSpreadsheet(state, userInfo)
+        return ContactsInfoRequest(state)
     }
 
     override fun updateState(newInput: String) {

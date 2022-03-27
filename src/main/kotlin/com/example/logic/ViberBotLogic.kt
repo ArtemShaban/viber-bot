@@ -40,7 +40,7 @@ class ViberBotLogic internal constructor(state: State?, userInfo: UserInfo?) :
 
     private fun handleFinishedState(state: State): FinishBotRequest {
 //        emailLogic.sendEmail(state) //Send email when user finished all bot steps.
-        SpreadsheetLogic().addUserDataToSpreadsheet(state, userInfo)
+        SpreadsheetLogic().addViberUserDataToSpreadsheet(state, userInfo)
         return FinishBotRequest(state)
     }
 
