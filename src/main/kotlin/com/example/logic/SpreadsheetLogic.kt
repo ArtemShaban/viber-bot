@@ -11,7 +11,7 @@ class SpreadsheetLogic {
     private val spreadsheetSender = SpreadsheetSender()
 
     fun addViberUserDataToSpreadsheet(state: ViberBotLogic.State, userInfo: UserInfo?) {
-        val userCondition = CheckStateRequest.UserState.valueOf(state.state!!)
+        val userCondition = state.state?.let { CheckStateRequest.UserState.valueOf(it) }
         val userConditionAnswer = CheckStateRequest(state).getOptions()[userCondition].orEmpty()
 
         val chosenLang = state.userLang.orEmpty()
