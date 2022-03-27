@@ -8,7 +8,7 @@ class ContactsInfoRequest(state: Any) : UserRequest<ContactsInfoRequest.Option>(
     enum class Option : UserOption {
         CHAT {
             override fun getUrl(): String {
-                return "https://t.me/+eagcdSZViy1iZTIy"
+                return "https://t.me/+iXteXhfM4YQ5MTVi"
             }
         },
         ZOOM {
@@ -34,8 +34,8 @@ class ContactsInfoRequest(state: Any) : UserRequest<ContactsInfoRequest.Option>(
                 "Долучайтесь до нашої спільноти для корисної та практичної інформації від наших спеціалістів\n"
 
     override fun getOptions(): Map<Option, String> = mapOf(
-        Pair(Option.CHAT, "чат Психологічної підтримки “Перемога”"),
         Pair(Option.ZOOM, "перейти в Zoom кімнату"),
+        Pair(Option.CHAT, "чат Психологічної підтримки “Перемога”"),
         Pair(Option.FACEBOOK, "Facebook"),
         Pair(Option.INSTAGRAM, "Instagram")
     )
