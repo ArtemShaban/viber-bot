@@ -21,15 +21,8 @@ class ViberBotLogic internal constructor(state: State?, userInfo: UserInfo?) :
         return when {
             state.userLang == null -> WelcomeRequest(state)
             state.userName == null -> EnterNameRequest(state)
-            state.phoneNumber == null -> EnterPhoneRequest(state)
-            state.state == null -> CheckStateRequest(state)
-            state.emergencyHelpShown != null -> null
-            CheckStateRequest.UserState.EMERGENCY == CheckStateRequest.UserState.get(state) -> EmergencyHelpBotRequest(
-                state
-            )
-
             state.stressLevel == null -> StressLevelRequest(state)
-            state.stressSource == null -> ChooseSourceRequest(state)
+            state.phoneNumber == null -> EnterPhoneRequest(state)
             state.contactType == null -> ContactTypeRequest(state)
             state.finished == null -> handleFinishedState(state)
             state.finished != null -> null

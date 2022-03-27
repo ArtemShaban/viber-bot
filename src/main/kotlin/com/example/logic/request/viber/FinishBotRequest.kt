@@ -13,6 +13,11 @@ class FinishBotRequest(override val state: ViberBotLogic.State) :
             override fun getUrl(): String {
                 return "https://us02web.zoom.us/j/86374750332?pwd=R1FNWWdSRzhIV0V1QmRzOG9GbFlEQT09"
             }
+        },
+        VIBER_GROUP {
+            override fun getUrl(): String {
+                return "https://invite.viber.com/?g2=AQB%2B2SqGrmoY%2BU7o%2BVucPwI6tjsKGrrN5iw77WPT%2FOJRLqcA7gn8kBJeEOxj3WOa"
+            }
         }
     }
 
@@ -33,6 +38,14 @@ class FinishBotRequest(override val state: ViberBotLogic.State) :
                 Lang.RU -> "Просим перейти в Zoom комнату, где наш координатор направит вас к дежурному психологу. Благодарим и уверяем - Мы победим!"
                 Lang.EN -> "Please follow Zoom room, where our coordinator will direct you to the psychologist on duty. Thank you and be sure."
             }
+            ContactTypeRequest.ContactType.VIBER_GROUP -> when (Lang.valueOf(state.userLang!!)) {
+                Lang.UA -> "Для швидкої відповіді спеціаліста перейдіть за кнопкою нижче, після переходу напишіть у чаті коротке повідомлення,наприклад:" +
+                        " \"Хочу щоб мені допомогли. Мій контактний телефон: xxx-xx-xxxxxx\""
+                Lang.RU -> "Чтобы быстро получить помощь, перейдите в группу Viber, нажав кнопку ниже, и напишите любое сообщение.\n" +
+                        "Например: \"Здравствуйте, мне нужна экстренная помощь. Мой контактный телефон: xxx-xx-xxxxxx\""
+                Lang.EN -> "To get help quickly, go to the Viber group by clicking the button below and write any message.\n" +
+                        "For example: \"Hello, I need emergency assistance. My contact phone: xxx-xx-xxxxxx\""
+            }
         }
     }
 
@@ -42,6 +55,11 @@ class FinishBotRequest(override val state: ViberBotLogic.State) :
                 Lang.UA -> Pair(Option.ZOOM, "перейти в Zoom кімнату")
                 Lang.RU -> Pair(Option.ZOOM, "перейти в Zoom комнату")
                 Lang.EN -> Pair(Option.ZOOM, "follow Zoom room")
+            }
+            ContactTypeRequest.ContactType.VIBER_GROUP -> when (Lang.valueOf(state.userLang!!)) {
+                Lang.UA -> Pair(Option.VIBER_GROUP, "перейти в Viber групу")
+                Lang.RU -> Pair(Option.VIBER_GROUP, "перейти в Viber группу")
+                Lang.EN -> Pair(Option.VIBER_GROUP, "follow Viber group")
             }
             else -> null
         }

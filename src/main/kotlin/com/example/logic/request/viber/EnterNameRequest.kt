@@ -10,10 +10,8 @@ class EnterNameRequest(override val state: ViberBotLogic.State) :
 
     override fun getMessage(): String {
         return when (Lang.valueOf(state.userLang!!)) {
-            Lang.UA -> "Як я можу до вас звертатись? \n" +
-                    "(Вкажи нижче своє імʼя або нік)\n"
-            Lang.RU -> "Как я могу к вам обращаться? \n" +
-                    "(напишите пожалуйста, ваше имя либо ник) "
+            Lang.UA -> "Як я можу до вас звертатись?"
+            Lang.RU -> "Как я могу к вам обращаться?"
             Lang.EN -> "Please write your name to continue"
         }
     }
