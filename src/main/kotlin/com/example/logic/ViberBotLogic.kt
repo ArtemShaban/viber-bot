@@ -41,16 +41,8 @@ class ViberBotLogic internal constructor(state: State?, userInfo: UserInfo?) :
         when {
             state.userLang == null -> state.userLang = newInput
             state.userName == null -> state.userName = newInput
-            state.phoneNumber == null -> state.phoneNumber = newInput
-            state.state == null -> state.state = newInput
-            CheckStateRequest.UserState.EMERGENCY == CheckStateRequest.UserState.get(state) -> {
-                state.emergencyHelpShown = true
-                if (EmergencyHelpBotRequest.Option.RESTART.name == newInput) resetState()
-            }
-
-            //todo need to validate stress level, if not int - send a message.
             state.stressLevel == null -> state.stressLevel = newInput.toInt()
-            state.stressSource == null -> state.stressSource = newInput
+            state.phoneNumber == null -> state.phoneNumber = newInput
             state.contactType == null -> state.contactType = newInput
 
             state.finished == null -> {
