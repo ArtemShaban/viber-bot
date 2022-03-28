@@ -40,16 +40,11 @@ class ContactTypeRequest(override val state: ViberBotLogic.State) :
                 Lang.RU -> "Zoom встреча с психологом (8.00-22.00)"
                 Lang.EN -> "Zoom meeting with a psychologist (8.00-22.00)"
             }
-            ContactType.VIBER_GROUP -> when (Lang.valueOf(state.userLang!!)) {
-                Lang.UA -> "Viber група для швидкої відповіді"
-                Lang.RU -> "Viber группа для быстрого ответа"
-                Lang.EN -> "Viber group for quick answer"
-            }
         }
     }
 
     enum class ContactType : UserOption {
-        VIBER_CHAT, ZOOM_MEETING, PHONE_CALL, VIBER_GROUP;
+        VIBER_CHAT, ZOOM_MEETING, PHONE_CALL;
 
         companion object {
             fun get(state: ViberBotLogic.State): ContactType =

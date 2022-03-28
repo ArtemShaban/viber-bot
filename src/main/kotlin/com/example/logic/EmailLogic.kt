@@ -42,7 +42,6 @@ class EmailLogic {
             ContactTypeRequest.ContactType.PHONE_CALL -> "[звонок] Запрос на психологическую помощь из viber чат бота"
             ContactTypeRequest.ContactType.VIBER_CHAT -> "[viber] Пользователь запросил помощь через viber из viber чат бота"
             ContactTypeRequest.ContactType.ZOOM_MEETING -> "[zoom] Пользователь запросил помощь через zoom из viber чат бота"
-            ContactTypeRequest.ContactType.VIBER_GROUP -> "[viber group] Пользователь запросил помощь через viber group из viber чат бота"
         }
     }
 }
