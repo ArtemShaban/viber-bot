@@ -6,7 +6,7 @@ import com.example.logic.request.UserRequest
 class IntroMessageRequest(state: Any) : UserRequest<IntroMessageRequest.Option>(state) {
     enum class Option : UserOption { CONTINUE }
 
-    override fun getMessage() = "Доброго дня, ми точно знаємо, що зараз нам усім:\n" +
+    override fun getMessage() = "Доброго дня. Зараз кожному з нас може бути:\n" +
             "✅ Страшно\n" +
             "✅ Тревожно\n" +
             "✅ Незрозуміло\n" +
