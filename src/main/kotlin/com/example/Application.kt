@@ -246,6 +246,7 @@ private fun newMessage(userRequest: UserRequest<*>, receiverId: String? = null):
         Keyboard(
             type = "keyboard",
             defaultHeight = false,
+            customDefaultHeight = 40,
             inputFieldState = "hidden",
             buttons = buttons
         )

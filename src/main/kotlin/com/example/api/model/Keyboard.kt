@@ -9,6 +9,9 @@ data class Keyboard(
     @Json(name = "DefaultHeight")
     val defaultHeight: Boolean,
 
+    @Json(name = "CustomDefaultHeight")
+    val customDefaultHeight: Int,
+
     @Json(name = "InputFieldState")
     val inputFieldState: String,
 
