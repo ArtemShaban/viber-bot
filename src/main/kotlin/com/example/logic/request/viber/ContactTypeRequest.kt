@@ -49,7 +49,7 @@ class ContactTypeRequest(override val state: ViberBotLogic.State) :
     }
 
     enum class ContactType : UserOption {
-        ZOOM_MEETING, VIBER_CHAT, PHONE_CALL, VIBER_GROUP;
+        ZOOM_MEETING, VIBER_GROUP, VIBER_CHAT, PHONE_CALL;
 
         companion object {
             fun get(state: ViberBotLogic.State): ContactType =
