@@ -10,12 +10,12 @@ class ContactTypeRequest(override val state: ViberBotLogic.State) :
 
     override fun getMessage(): String {
         return when (Lang.valueOf(state.userLang!!)) {
-            Lang.UA -> "Наші спеціалісти працюють з 8 до 22 щодня ви завжди можете отримати підтримку у зручному для вас форматі у той час коли вам це потрібно." +
-                    "\nЯк вам зручно спілкуватися зі спеціалістом/психологом:"
-            Lang.RU -> "Наши специалисты работают с 8 до 22 ежедневно, вы всегда можете получить поддержку в удобном для вас формате в то время когда вам это нужно." +
-                    "\nКак вам удобно общаться со специалистом/психологом:"
-            Lang.EN -> "Our specialists work from 8 to 22 every day, you can always get support in a format convenient for you at the time you need it." +
-                    "\nHow convenient it is for you to communicate with a specialist / psychologist:"
+            Lang.UA -> "Для більш оперативної відповіді ви можете звернутися за підтримкою в зручному для вас форматі, спеціалісти платформи працюють з 8 до 22 щодня!" +
+                    "\nОберіть ваш варіант і ви автоматично перейдете в Zoom, Viber або очікуйте дзвінок в найближчий час за номером який ви вказали."
+            Lang.RU -> "Для более оперативного ответа вы можете обратиться за поддержкой в удобном для вас формате, специалисты платформы работают с 8 до 22 ежедневно!" +
+                    "\nВыберите ваш вариант и вы автоматически перейдете в Zoom, Viber или ждите звонок в ближайшее время по номеру, который вы указали."
+            Lang.EN -> "For a more prompt response you can ask for support in a format convenient for you, the platform specialists work from 8 to 22 daily!" +
+                    "\nChoose your option and you will automatically switch to Zoom, Viber or wait call soon at the number you specified."
         }
     }
 
@@ -49,7 +49,7 @@ class ContactTypeRequest(override val state: ViberBotLogic.State) :
     }
 
     enum class ContactType : UserOption {
-        VIBER_CHAT, ZOOM_MEETING, PHONE_CALL, VIBER_GROUP;
+        ZOOM_MEETING, VIBER_CHAT, PHONE_CALL, VIBER_GROUP;
 
         companion object {
             fun get(state: ViberBotLogic.State): ContactType =
