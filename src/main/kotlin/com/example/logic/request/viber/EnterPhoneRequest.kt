@@ -11,9 +11,9 @@ class EnterPhoneRequest(override val state: ViberBotLogic.State) :
 
     override fun getMessage(): String {
         return when (Lang.valueOf(state.userLang!!)) {
-            Lang.UA -> "Для швидкої відповіді нашого спеціаліста, просимо вас залишити ваш номер телефону, для того щоб наш спеціаліст міг зв'язатися з вами в приватному чаті."
-            Lang.RU -> "Для быстрого ответа на нашего специалиста, просим вас оставить ваш контактный номер или на следующем шаге перейти в чат Viber группы."
-            Lang.EN -> "For a quick response from our specialist, please leave your contact number or in the next step go to the Viber group chat."
+            Lang.UA -> "Наш спеціаліст зможе швидко відповісти вам, якщо ви вкажете ваш номер телефону. Ми дуже хочемо вам допомогти, тому і просимо написати контактний номер телефону."
+            Lang.RU -> "Наш специалист сможет быстро ответить вам, если вы укажете номер телефона. Мы очень хотим вам помочь, потому и просим написать контактный номер телефона."
+            Lang.EN -> "Our specialist will be able to answer you quickly if you provide your phone number. We really want to help you, so please write your contact phone number."
         }
     }
 
